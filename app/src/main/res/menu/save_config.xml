@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_delete"
+        android:title="@string/del"
+        android:icon="@drawable/ic_round_delete_24"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_test"
+        android:title="@string/test"
+        android:icon="@drawable/ic_round_check_24"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_save"
+        android:title="@string/add"
+        android:icon="@drawable/ic_round_save_24"
+        app:showAsAction="ifRoom" />
+</menu>

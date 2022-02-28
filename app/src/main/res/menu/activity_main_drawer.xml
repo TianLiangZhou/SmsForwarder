@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+                android:id="@+id/home"
+                android:icon="@drawable/ic_round_format_list_bulleted_24"
+                android:title="@string/forward_log"/>
+
+        <item
+                android:id="@+id/rule_fragment"
+                android:icon="@drawable/ic_round_rule_24"
+                android:title="@string/rule_setting"/>
+
+        <item
+                android:id="@+id/sender_fragment"
+                android:icon="@drawable/ic_round_send_24"
+                android:title="@string/sender_setting"/>
+
+
+
+        <item
+                android:id="@+id/to_app_list"
+                android:orderInCategory="100"
+                android:title="@string/app_list"
+                android:icon="@drawable/ic_app"
+                />
+
+        <item
+                android:id="@+id/to_setting"
+                android:orderInCategory="100"
+                android:title="@string/setting"
+                android:icon="@drawable/ic_settings"
+                 />
+        <item
+                android:id="@+id/to_clone"
+                android:orderInCategory="100"
+                android:title="@string/clone"
+                android:icon="@drawable/ic_clone"
+                 />
+        <item
+                android:id="@+id/to_about"
+                android:orderInCategory="100"
+                android:title="@string/about"
+                android:icon="@drawable/ic_forwarder"
+                 />
+        <item
+                android:id="@+id/to_help"
+                android:orderInCategory="100"
+                android:title="@string/help"
+                android:icon="@drawable/ic_help"
+                />
+    </group>
+</menu>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_name"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="token"
+        app:icon="@drawable/ic_round_link_24"
+        app:title="@string/dingding_token"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="secret"
+        app:icon="@drawable/ic_round_vpn_key_24"
+        app:title="@string/dingding_secret"
+        app:useSimpleSummaryProvider="true"/>
+
+    <EditTextPreference
+        app:key="atMobiles"
+        app:icon="@drawable/ic_round_contact_phone_24"
+        app:title="@string/dingding_at"
+        app:useSimpleSummaryProvider="true"/>
+
+    <SwitchPreference
+        app:key="atAll"
+        app:icon="@drawable/ic_round_reply_all_24"
+        app:title="@string/is_at_all"
+        app:useSimpleSummaryProvider="true"/>
+
+</PreferenceScreen>

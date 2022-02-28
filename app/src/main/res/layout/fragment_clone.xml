@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.system.CloneFragment"
+        android:orientation="vertical">
+    <include layout="@layout/toolbar_light_dark"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_weight="2"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:baselineAligned="false">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/send"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="0dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        app:icon="@drawable/ic_round_send_24"
+                        app:iconSize="48dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:shapeAppearanceOverlay="@style/AppTheme.Button.Circle"
+                        />
+                <TextView
+                        android:id="@+id/sendTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:text="@string/send" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="72dp"
+                android:layout_marginEnd="72dp"
+                />
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/receive"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="0dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        app:icon="@drawable/ic_round_send_reverse_24"
+                        app:iconSize="48dp"
+                        app:iconPadding="0dp"
+                        app:iconGravity="textStart"
+                        app:shapeAppearanceOverlay="@style/AppTheme.Button.Circle"
+                        />
+
+                <TextView
+                        android:id="@+id/receiveTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:text="@string/receive" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:gravity="bottom"
+                android:layout_height="0dip"
+                android:layout_weight="1"
+                android:layout_width="match_parent">
+            <TextView
+                    android:id="@+id/ipText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10sp"
+                    android:text="@string/local_ip"
+                    android:textStyle="bold" />
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10sp"
+                    android:text="@string/operating_instruction" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

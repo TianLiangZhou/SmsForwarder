@@ -1,12 +1,11 @@
-package com.idormy.sms.forwarder.utils
+package com.idormy.sms.forwarder.utilities
 
 import android.os.Environment
 import java.io.File
 import java.io.FileInputStream
-import java.io.IOException
 import java.util.*
 
-class BuildProperties private constructor() {
+object BuildProperties {
     private val properties: Properties = Properties()
 
     init {
@@ -21,7 +20,7 @@ class BuildProperties private constructor() {
         return properties.containsValue(value)
     }
 
-    fun getProperty(name: String?): String {
+    fun getProperty(name: String?): String? {
         return properties.getProperty(name)
     }
 
@@ -50,16 +49,5 @@ class BuildProperties private constructor() {
 
     fun values(): Collection<*> {
         return properties.values
-    }
-
-    companion object {
-        private var ourInstance: BuildProperties? = null
-
-        @get:Throws(IOException::class)
-        val instance: BuildProperties?
-            get() {
-                if (ourInstance == null) ourInstance = BuildProperties()
-                return ourInstance
-            }
     }
 }

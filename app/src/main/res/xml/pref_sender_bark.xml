@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_bark_name"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <EditTextPreference
+        app:key="server"
+        app:icon="@drawable/ic_round_link_24"
+        app:title="@string/set_bark_server"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <EditTextPreference
+        app:key="icon"
+        app:icon="@drawable/ic_round_web_asset_24"
+        app:title="@string/set_bark_icon"
+        app:useSimpleSummaryProvider="true"/>
+
+</PreferenceScreen>

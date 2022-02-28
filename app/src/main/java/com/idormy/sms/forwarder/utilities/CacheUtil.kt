@@ -1,4 +1,4 @@
-package com.idormy.sms.forwarder.utils
+package com.idormy.sms.forwarder.utilities
 
 import android.content.Context
 import android.os.Environment

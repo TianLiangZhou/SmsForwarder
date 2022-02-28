@@ -1,8 +1,6 @@
-package com.idormy.sms.forwarder.data
+package com.idormy.sms.forwarder.sender.vo
 
-import com.idormy.sms.forwarder.R
 import kotlinx.serialization.Serializable
-import java.net.Proxy
 
 @Serializable
 data class TelegramSettingVo(
@@ -13,21 +11,5 @@ data class TelegramSettingVo(
     var proxyPort: String = "1086",
     var proxyAuthenticator: Boolean = false,
     var proxyUsername: String? = null,
-    var proxyPassword: String? = null) {
-    var proxyType = Proxy.Type.DIRECT
-    var proxyTypeId = 0
-    init {
-        proxyType = when (proxyTypeId) {
-            R.id.btnProxyHttp -> Proxy.Type.HTTP
-            R.id.btnProxySocks -> Proxy.Type.SOCKS
-            else -> Proxy.Type.DIRECT
-        }
-    }
-
-    val proxyTypeCheckId: Int
-        get() = when (proxyType) {
-            Proxy.Type.HTTP -> R.id.btnProxyHttp
-            Proxy.Type.SOCKS -> R.id.btnProxySocks
-            else -> R.id.btnProxyNone
-        }
-}
+    var proxyPassword: String? = null
+)

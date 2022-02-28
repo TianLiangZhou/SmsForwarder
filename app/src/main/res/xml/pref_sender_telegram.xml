@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_name"
+        app:useSimpleSummaryProvider="true"/>
+
+    <EditTextPreference
+        app:key="token"
+        app:icon="@drawable/ic_round_link_24"
+        app:title="@string/TelegramApiToken"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <EditTextPreference
+        app:key="chatId"
+        app:icon="@drawable/ic_round_group_24"
+        app:title="@string/TelegramChatId"
+        app:useSimpleSummaryProvider="true"/>
+    <PreferenceCategory
+        app:title="@string/proxy">
+
+        <ListPreference
+            app:key="protocol"
+            app:icon="@drawable/ic_round_router_24"
+            app:title="@string/proxy_settings"
+            app:entries="@array/proxy_protocol"
+            app:entryValues="@array/proxy_protocol_value"
+            app:useSimpleSummaryProvider="true"
+            />
+
+        <EditTextPreference
+            app:key="host"
+            app:icon="@drawable/ic_round_router_24"
+            app:title="@string/hostname"
+            app:enabled="false"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="port"
+            app:icon="@drawable/ic_round_electrical_services_24"
+            app:title="@string/port"
+            app:enabled="false"
+            app:useSimpleSummaryProvider="true"/>
+
+
+        <SwitchPreference
+            app:key="authenticator"
+            app:icon="@drawable/ic_round_lock_open_24"
+            app:title="@string/proxy_authenticator"
+            app:enabled="false"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="username"
+            app:icon="@drawable/ic_round_account_box_24"
+            app:title="@string/username"
+            app:enabled="false"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="pwd"
+            app:icon="@drawable/ic_round_vpn_key_24"
+            app:title="@string/password"
+            app:enabled="false"
+            app:useSimpleSummaryProvider="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

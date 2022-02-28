@@ -1,28 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/rule_sender_image"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="5dp"
-        android:layout_gravity="center_vertical"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/rule_match"
-        android:layout_width="wrap_content"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@drawable/background_item"
+              tools:ignore="UseCompoundDrawables"
+              android:focusable="true"
+              android:nextFocusRight="@+id/editorRule"
+              android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="5dp" />
+        android:layout_marginStart="16dp"
+        tools:ignore="UselessParent">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:clickable="false"
+            android:id="@+id/rule_sender_image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginVertical="5dp"
+            android:layout_gravity="center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/sender_setting"/>
 
-    <TextView
-        android:id="@+id/rule_sender"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/rule_match"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/editorRule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:contentDescription="@string/editor"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:padding="12dp"
+            android:nextFocusRight="@id/copySender"
+            app:srcCompat="@drawable/ic_round_create_24"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/copyRule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:contentDescription="@string/clone"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:padding="12dp"
+            app:srcCompat="@drawable/ic_round_content_copy_24"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="5dp" />
+        android:layout_marginStart="16dp"
+        >
+        <TextView
+            android:id="@android:id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_toStartOf="@+id/date"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            tools:text="@string/set_name"/>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            tools:text="@string/set_name"/>
+    </RelativeLayout>
 </LinearLayout>

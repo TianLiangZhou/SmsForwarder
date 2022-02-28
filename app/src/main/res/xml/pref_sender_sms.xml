@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_name"
+        app:useSimpleSummaryProvider="true"/>
+    <ListPreference
+        app:key="simSlot"
+        app:icon="@drawable/ic_round_sim_card_24"
+        app:title="@string/SmsSimSlot"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="mobiles"
+        app:icon="@drawable/ic_round_contact_phone_24"
+        app:title="@string/SmsMobiles"
+        app:useSimpleSummaryProvider="true"/>
+
+</PreferenceScreen>

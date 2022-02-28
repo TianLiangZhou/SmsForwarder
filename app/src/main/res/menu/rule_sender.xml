@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:alphabeticShortcut="n"
+        android:id="@+id/rule"
+        android:icon="@drawable/ic_round_rule_24"
+        android:title="@string/rule_setting"
+        app:showAsAction="always" />
+
+    <item
+        android:alphabeticShortcut="n"
+        android:id="@+id/sender"
+        android:icon="@drawable/ic_round_send_24"
+        android:title="@string/sender_setting"
+        app:showAsAction="ifRoom" />
+
+</menu>

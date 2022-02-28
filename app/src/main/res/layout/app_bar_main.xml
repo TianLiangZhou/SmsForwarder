@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/snackbar"
+        android:fitsSystemWindows="true"
+        tools:context=".MainActivity">
+
+    <include
+        layout="@layout/content_main"
+        android:id="@+id/include"/>
+
+
+    <com.idormy.sms.forwarder.widget.ServiceFloatingButton
+            android:id="@+id/fab_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            android:nextFocusDown="@id/stats"
+            app:backgroundTint="@color/background_service"
+            app:fabSize="normal"
+            app:pressedTranslationZ="6dp"
+            android:tint="@android:color/white"
+            app:srcCompat="@drawable/ic_round_send_24"
+            app:layout_anchorGravity="bottom|center"
+            app:layout_anchor="@+id/stats"/>
+
+    <com.idormy.sms.forwarder.widget.StatsBar
+            android:id="@+id/stats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:fitsSystemWindows="true"
+            android:nextFocusUp="@+id/fab_service"
+            app:backgroundTint="@color/backgroundStat"
+            app:contentInsetStart="0dp"
+            app:layout_scrollFlags="enterAlways|scroll"
+            app:hideOnScroll="true"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

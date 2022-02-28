@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1C8DD4</color>
-    <color name="colorPrimaryDark">#1B8DD4</color>
-    <color name="colorAccent">#63C2FA</color>
-    <color name="colorBlueGrey">#78909C</color>
-    <color name="colorBlueGreyDark">#546E7A</color>
-    <color name="gray_text_light">#979797</color>
+
+    <color name="material_blue_100">#A5D5F3</color>
+    <color name="material_blue_300">#81C4EF</color>
+    <color name="material_blue_500">#5DB4EA</color>
+    <color name="material_blue_600">#38A3E5</color>
+    <color name="material_blue_700">#1C8DD4</color>
+    <color name="material_blue_800">#1778B5</color>
+
+
+    <color name="material_grey_100">#C4CFD4</color>
+    <color name="material_grey_300">#ADBBC2</color>
+    <color name="material_grey_500">#95A8B1</color>
+    <color name="material_grey_600">#78909C</color>
+    <color name="material_grey_700">#68818D</color>
+    <color name="material_grey_800">#576B75</color>
+
+
+
+
+    <color name="colorPrimary">@color/material_blue_700</color>
+    <color name="colorPrimaryDark">@color/material_blue_800</color>
+    <color name="colorAccent">@color/material_blue_500</color>
+
+    <color name="colorBlueGrey">@color/material_grey_600</color>
+    <color name="colorBlueGreyDark">@color/material_grey_800</color>
+    <color name="colorAccentDark">@color/material_grey_300</color>
+
+    <color name="backgroundSelected">@color/colorPrimary</color>
+    <color name="backgroundStat">@color/colorBlueGrey</color>
 </resources>

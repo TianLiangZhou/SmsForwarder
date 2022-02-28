@@ -3,12 +3,12 @@ package com.idormy.sms.forwarder.db.model
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class RuleAndSender(
+data class SenderAndRule(
     @Embedded
     val sender: Sender,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "userOwnerId"
+        parentColumn = "_id",
+        entityColumn = "sender_id"
     )
-    val rules: List<Rule>,
+    val rules: List<Rule>?,
 )

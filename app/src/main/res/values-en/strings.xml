@@ -9,17 +9,30 @@
     <string name="confirm">Confirm</string>
     <string name="all">All</string>
     <string name="select">Select</string>
-    <string name="clone">Clone Settings</string>
+    <string name="clone">Clone</string>
     <string name="setting">Settings</string>
     <string name="about">About</string>
     <string name="help">Help</string>
-    <string name="rule_setting">Rule Setting</string>
-    <string name="sender_setting">Sender Setting</string>
-    <string name="app_list">App List</string>
+    <string name="add">Add</string>
+    <string name="editor">editor</string>
+    <string name="rule_setting">Rule</string>
+    <string name="sender_setting">Sender</string>
+    <string name="forward_log">Confirmation</string>
+    <string name="app_list">App</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="log_tips">Tips: Pull to refresh; Long press to delete one log entry.</string>
     <string name="rule_tips">Tips: Tap "NEW SMS/Call Fw. RULE" to add a new rule; Long press a rule to delete; Tap an existing rule to edit.</string>
     <string name="sender_tips">Tips: Tap "NEW SENDER" to add a new sender; Long press a sender to delete; Tap an existing sender to edit.</string>
     <string name="app_tips">Tips: Tap to copy the package name of an App; Long press an App to start and jump to it.</string>
+
+
+    <plurals name="removed">
+        <item quantity="one">Removed</item>
+        <item quantity="other">%d items removed</item>
+    </plurals>
+    <string name="undo">Undo</string>
+
     <!--AboutActivity-->
     <string name="version">Version</string>
     <string name="check_for_updates">Check for updates</string>
@@ -59,6 +72,7 @@
     <string name="add_sender_first">Please add a sender first.</string>
     <string name="select_sender">Select Sender</string>
     <string name="rule_tester">Rule tester:</string>
+    <string name="new_rule">New Fw. Rule</string>
     <string name="new_sms_rule">New SMS Fw. Rule</string>
     <string name="new_call_rule">New Call Fw. Rule</string>
     <string name="new_app_rule">New App Fw. Rule</string>
@@ -67,6 +81,7 @@
     <string name="test_msg_content">Test Msg Content</string>
     <string name="test_package_name">Test PackageName</string>
     <string name="test_inform_content">Test Ntf. content</string>
+    <string name="rule_category">Rule Category</string>
     <string name="match_sim_slot">SIM Slot</string>
     <string name="match_field">Field</string>
     <string name="phone_number">Phone No.</string>
@@ -101,7 +116,7 @@
     <string name="setfeishutitle">FeiShu Bot Settings</string>
     <string name="setpushplustitle">PushPlus Settings</string>
     <string name="test_phone_num">19999999999</string>
-    <string name="test_content">Test content @</string>
+    <string name="test_content">content</string>
     <string name="test_sms">【JD】code 387481, ihelp.jd.com</string>
     <string name="test_group_name">Test Group Name</string>
     <string name="failed_to_fwd">Failed to fwd：</string>
@@ -115,13 +130,20 @@
     <string name="invalid_at_mobiles">The specified member cannot be blank or select @all</string>  <!-- “指定成员 不能为空 或者 选择@all” 这句话是什么意思？“指定成员既不能为‘空’也不能为‘选择@all’”吗？还是“指定成员不能为空，或者可以@all”呢？ -->
     <string name="invalid_phone_num">Phone number cannot be blank</string>
     <string name="new_sender">New Sender</string>
-    <string name="set_bark_name">Bark Group Name</string>
-    <string name="set_bark_server">Bark-Server, e.g. https://bark.bms.ink/XXXXXXXX/</string>
-    <string name="set_bark_icon">Bark-Icon (optional), e.g. http://day.app/assets/images/avatar.jpg</string>
+    <string name="set_bark_name">Group Name</string>
+    <string name="set_bark_server">Server</string>
+    <string name="set_bark_server_helper">e.g. https://bark.bms.ink/XXXXXXXX/</string>
+    <string name="set_bark_icon">Icon</string>
+    <string name="set_bark_icon_helper">(optional), e.g. http://day.app/assets/images/avatar.jpg</string>
     <string name="set_name">Name</string>
-    <string name="dingding_token">Token e.g. the XXXXXX part of https://oapi.dingtalk.com/robot/send?access_token=XXXXXX</string>
-    <string name="dingding_secret">Secret (optional)</string>
-    <string name="dingding_at">At Mobiles e.g. 18888888888,19999999999</string>
+    <string name="dingding_token">Token</string>
+    <string name="dingding_token_helper">e.g. the XXXXXX part of https://oapi.dingtalk.com/robot/send?access_token=XXXXXX</string>
+    <string name="dingding_secret">Secret</string>
+    <string name="dingding_secret_helper">(optional), e.g. 2J64srstE9CBKglKTLZsxEqYQQXSSWGY</string>
+    <string name="dingding_at">At Mobiles</string>
+    <string name="dingding_at_helper">e.g. 18888888888,19999999999</string>
+    <string name="email_server_category">Server</string>
+    <string name="email_account_category">Account</string>
     <string name="email_protocol">Protocol</string>
     <string name="email_smtp">SMTP</string>
     <string name="email_imap">IMAP </string>
@@ -134,7 +156,9 @@
     <string name="email_to">Send To</string>
     <string name="email_title">Email Title</string>
     <string name="feishu_webhook">Webhook</string>
-    <string name="feishu_secret">Secret (optional)</string>
+    <string name="feishu_webhook_helper">e.g. https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxxxxxxxxxxxx</string>
+    <string name="feishu_secret">Secret</string>
+    <string name="feishu_secret_helper">(optional) e.g. 2J64srstE9CBKglKTLZsxEqYQQXSSWGY</string>
     <string name="Corp_ID">Corp ID</string>
     <string name="Agent_ID">Agent ID</string>
     <string name="App_Secret">App Secret</string>
@@ -142,17 +166,22 @@
     <string name="specified_member">Specified Member</string>
     <string name="at_all">\@all</string>
     <string name="specified_member_tips">Tip：Specify members receive messages, member ID list (multiple recipients with \'|\' space, maximum 1000)</string>
-    <string name="QYWXGroupRobotWebHook">WebHook, e.g. https://qyapi.weixin.qq.com/cgixx?key=xxx</string>
+    <string name="QYWXGroupRobotWebHook">WebHook</string>
+    <string name="QYWXGroupRobotWebHookHelper">e.g. https://qyapi.weixin.qq.com/cgixx?key=xxx</string>
     <string name="ServerChanSendKey">ServerChan\'s SendKey</string>
     <string name="TelegramApiToken">ApiToken or Custom address</string>
     <string name="TelegramChatId">ChatId</string>
     <string name="WebNotifyMethod">Method</string>
-    <string name="WebNotifyWebServer">WebServer e.g. https://a.b.com/msg?token=xyz</string>
-    <string name="WebNotifyWebParams">WebParams e.g. payload=%7B%22text%22%3A%22[msg]%22%7D [msg] will be replaced with text message content. \nSupport Json format, for example: {"text":[MSG]}.\n Note: MSG is automatically utF-8 encoded in addition to JSON format</string>
-    <string name="WebNotifySecret">Secret (sign is not counted if left blank)</string>
+    <string name="WebNotifyWebServer">WebServer</string>
+    <string name="WebNotifyWebServerHelper">e.g. https://a.b.com/msg?token=xyz</string>
+    <string name="WebNotifyWebParams">WebParams</string>
+    <string name="WebNotifyWebParamsHelper">e.g. payload=%7B%22text%22%3A%22[msg]%22%7D [msg] will be replaced with text message content. \nSupport Json format, for example: {"text":[MSG]}.\n Note: MSG is automatically utF-8 encoded in addition to JSON format</string>
+    <string name="WebNotifySecret">Secret</string>
+    <string name="WebNotifySecretHelper">sign is not counted if left blank</string>
     <string name="SmsSimSlot">SIM Slot</string>
     <string name="same_source">Same source</string>
-    <string name="SmsMobiles">Receive mobile phone numbers separated by, e.g. 15888888888;19999999999</string>
+    <string name="SmsMobiles">Phone</string>
+    <string name="SmsMobileHelper">Receive mobile phone numbers separated by, e.g. 15888888888;19999999999</string>
     <string name="OnlyNoNetwork">Enable when no network is available</string>
     <!--SettingActivity-->
     <string name="device_name">Device name</string>
@@ -254,6 +283,7 @@
     <string name="zero">0</string>
     <string name="monitor_battery_status_changes">Monitor battery status changes</string>
     <string name="battery_status_changes_tips">Notify when charging status changes (charging/discharging/uncharged/fully charged)</string>
+    <string name="proxy">Proxy</string>
     <string name="proxy_settings">Proxy Settings</string>
     <string name="proxy_none">None</string>
     <string name="proxy_http">HTTP</string>
@@ -263,4 +293,25 @@
     <string name="proxy_authenticator">Proxy Authenticator</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+
+    <string name="unsaved_changes_prompt">Changes not saved. Do you want to save?</string>
+
+    <string name="test_origin">origin</string>
+
+    <string name="sender_dd">DingTalk Bot</string>
+    <string name="sender_email">DingTalk Bot</string>
+    <string name="sender_bark">Bark</string>
+    <string name="sender_webhook">Webhook</string>
+    <string name="sender_qywxgroup">WeCom Group Bot</string>
+    <string name="sender_qywx">WeCom</string>
+    <string name="sender_server">ServerChan·Turbo</string>
+    <string name="sender_telegram">Telegram Bot</string>
+    <string name="sender_sms">SMS</string>
+    <string name="sender_feishu">FeiShu Bot</string>
+    <string name="sender_plus">PushPlus</string>
+
+    <string name="direct_boot_aware">Allow Toggling in Lock Screen</string>
+    <string name="direct_boot_aware_summary">Your selected profile information will be less protected</string>
+
+
 </resources>

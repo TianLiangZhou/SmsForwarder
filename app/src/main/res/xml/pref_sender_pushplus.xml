@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_name"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="token"
+        app:icon="@drawable/ic_round_vpn_key_24"
+        app:title="@string/pushplus_token"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="topic"
+        app:icon="@drawable/ic_round_topic_24"
+        app:title="@string/pushplus_topic"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <ListPreference
+        app:key="template"
+        app:icon="@drawable/ic_round_apartment_24"
+        app:title="@string/pushplus_template"
+        app:entries="@array/pushplus_template"
+        app:entryValues="@array/pushplus_template"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <ListPreference
+        app:key="channel"
+        app:icon="@drawable/ic_round_router_24"
+        app:title="@string/pushplus_channel"
+        app:entries="@array/pushplus_channel"
+        app:entryValues="@array/pushplus_channel"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <EditTextPreference
+        app:key="webhook"
+        app:icon="@drawable/ic_round_link_24"
+        app:title="@string/pushplus_webhook"
+        app:useSimpleSummaryProvider="true"/>
+
+    <EditTextPreference
+        app:key="callbackUrl"
+        app:icon="@drawable/ic_round_link_24"
+        app:title="@string/pushplus_callback"
+        app:useSimpleSummaryProvider="true"/>
+
+    <EditTextPreference
+        app:key="validTime"
+        app:icon="@drawable/ic_round_timer_10_24"
+        app:title="@string/pushplus_valid_time"
+        app:useSimpleSummaryProvider="true"/>
+
+</PreferenceScreen>

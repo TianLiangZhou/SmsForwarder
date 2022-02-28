@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_name"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="corpID"
+        app:icon="@drawable/ic_round_group_24"
+        app:title="@string/Corp_ID"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="agentID"
+        app:icon="@drawable/ic_round_perm_identity_24"
+        app:title="@string/Agent_ID"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="secret"
+        app:icon="@drawable/ic_round_vpn_key_24"
+        app:title="@string/App_Secret"
+        app:useSimpleSummaryProvider="true"/>
+    <EditTextPreference
+        app:key="atAll"
+        app:icon="@drawable/ic_round_reply_all_24"
+        app:title="@string/is_at_all"
+        app:useSimpleSummaryProvider="true"/>
+
+    <EditTextPreference
+        app:key="toUser"
+        app:icon="@drawable/ic_round_person_24"
+        app:title="@string/specified_member"
+        app:useSimpleSummaryProvider="true"/>
+</PreferenceScreen>

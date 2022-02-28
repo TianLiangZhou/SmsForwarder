@@ -1,6 +1,5 @@
-package com.idormy.sms.forwarder.data
+package com.idormy.sms.forwarder.sender.vo
 
-import com.idormy.sms.forwarder.R
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,11 +13,4 @@ data class EmailSettingVo(
     val pwd: String = "",
     val toEmail: String = "to_example@gmail.com",
     val title: String = "forward subject"
-    ) {
-    val emailProtocolCheckId: Int
-        get() = if (protocol == null || protocol == "SMTP") {
-            R.id.radioEmailProtocolSmtp
-        } else {
-            R.id.radioEmailProtocolImap
-        }
-}
+)

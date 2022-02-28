@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+                  xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_name"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <ListPreference
+        app:key="category"
+        app:icon="@drawable/ic_round_category_24"
+        app:title="@string/rule_category"
+        app:entries="@array/rule_category"
+        app:entryValues="@array/rule_category_value"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        app:key="simSlot"
+        app:icon="@drawable/ic_round_sim_card_24"
+        app:title="@string/match_sim_slot"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        app:key="field"
+        app:icon="@drawable/ic_round_view_column_24"
+        app:title="@string/match_field"
+        app:entries="@array/rule_filed"
+        app:entryValues="@array/rule_filed_value"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        app:key="mode"
+        app:icon="@drawable/ic_round_rule_24"
+        app:title="@string/match_type"
+        app:entries="@array/rule_match_type"
+        app:entryValues="@array/rule_match_type_value"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <EditTextPreference
+        app:key="value"
+        app:icon="@drawable/ic_round_article_24"
+        app:title="@string/match_value"
+        app:useSimpleSummaryProvider="true"
+        />
+
+    <com.idormy.sms.forwarder.ui.rule.SenderPreferenceFragment
+        app:key="sender"
+        app:icon="@drawable/ic_round_send_24"
+        app:title="@string/select_sender"
+        app:useSimpleSummaryProvider="true"
+        />
+
+
+</PreferenceScreen>

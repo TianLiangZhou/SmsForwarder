@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        app:key="device_name"
+        app:icon="@drawable/ic_round_devices_24"
+        app:title="@string/device_name"
+        app:useSimpleSummaryProvider="true"
+            />
+
+    <SwitchPreference
+            app:key="switch_sms"
+            app:icon="@drawable/ic_round_sms_24"
+            app:title="@string/forward_sms"
+            app:useSimpleSummaryProvider="true"
+            />
+
+
+    <SwitchPreference
+            app:key="switch_call"
+            app:icon="@drawable/ic_round_phone_callback_24"
+            app:title="@string/forward_missed_calls"
+            app:useSimpleSummaryProvider="true"
+            />
+    <SwitchPreference
+            app:key="switch_notify"
+            app:icon="@drawable/ic_round_notifications_none_24"
+            app:title="@string/forward_app_notify"
+            app:useSimpleSummaryProvider="true"
+            />
+
+
+    <SwitchPreference
+            app:key="switch_custom_template"
+            app:icon="@drawable/ic_round_title_24"
+            app:title="@string/enable_custom_templates"
+            app:useSimpleSummaryProvider="true"
+            />
+
+    <EditTextPreference
+            app:key="custom_template"
+            app:icon="@drawable/ic_round_title_24"
+            app:title="@string/custom_templates"
+            app:useSimpleSummaryProvider="true"
+            app:enabled="false"
+            />
+
+
+    <SeekBarPreference
+            app:key="retry_interval"
+            app:icon="@drawable/ic_round_timer_10_24"
+            app:title="@string/retry_interval"
+            app:useSimpleSummaryProvider="true"
+            />
+
+    <SeekBarPreference
+            app:key="power_alarm"
+            app:icon="@drawable/ic_round_alarm_24"
+            app:title="@string/low_power_alarm_threshold"
+            app:useSimpleSummaryProvider="true"
+            />
+
+    <SwitchPreference
+            app:key="switch_monitor_battery"
+            app:icon="@drawable/ic_round_battery_charging_full_24"
+            app:title="@string/monitor_battery_status_changes"
+            app:useSimpleSummaryProvider="true"
+            />
+
+
+    <SwitchPreference
+            app:key="switch_exclude_recent"
+            app:icon="@drawable/ic_round_remove_from_queue_24"
+            app:title="@string/enable_exclude_from_recents"
+            app:useSimpleSummaryProvider="true"
+            />
+
+
+    <SwitchPreference
+            app:key="is_auto_startup"
+            app:icon="@drawable/ic_round_android_24"
+            app:title="@string/auto_startup"
+            app:useSimpleSummaryProvider="true"
+            />
+
+    <SwitchPreference
+            app:key="direct_boot_aware"
+            app:icon="@drawable/ic_round_lock_24"
+            app:summary="@string/direct_boot_aware_summary"
+            app:title="@string/direct_boot_aware"/>
+
+</PreferenceScreen>

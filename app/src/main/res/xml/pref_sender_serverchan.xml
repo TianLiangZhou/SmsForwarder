@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        app:key="name"
+        app:icon="@drawable/ic_round_title_24"
+        app:title="@string/set_name"
+        app:useSimpleSummaryProvider="true"/>
+
+
+    <EditTextPreference
+        app:key="sendKey"
+        app:icon="@drawable/ic_round_vpn_key_24"
+        app:title="@string/ServerChanSendKey"
+        app:useSimpleSummaryProvider="true"/>
+</PreferenceScreen>

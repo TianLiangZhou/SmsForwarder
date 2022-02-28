@@ -1,4 +1,4 @@
-package com.idormy.sms.forwarder.utilities
+package com.idormy.sms.forwarder.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

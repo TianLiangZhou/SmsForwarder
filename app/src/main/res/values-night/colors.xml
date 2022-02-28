@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/colorBlueGrey</color>
+    <color name="colorPrimaryDark">@color/colorBlueGreyDark</color>
+    <color name="colorAccent">@color/colorAccentDark</color>
+
+
+    <color name="backgroundSelected">@color/material_blue_700</color>
+    <color name="backgroundStat">@color/colorBlueGrey</color>
+</resources>

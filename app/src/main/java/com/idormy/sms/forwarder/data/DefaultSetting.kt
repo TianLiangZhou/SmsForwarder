@@ -1,6 +1,6 @@
 package com.idormy.sms.forwarder.data
 
-data class Setting(
+data class DefaultSetting(
     var deviceName: String =  "",
     var switchSms: Boolean = true,
     var switchCall: Boolean = true,

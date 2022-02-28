@@ -1,16 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="add_sender_menu">
-        <item>钉钉机器人</item>
-        <item>邮箱</item>
-        <item>Bark</item>
-        <item>Webhook</item>
-        <item>企业微信群机器人</item>
-        <item>企业微信应用消息</item>
-        <item>Server酱·Turbo版</item>
-        <item>Telegram机器人</item>
-        <item>其他手机短信</item>
-        <item>飞书机器人</item>
-        <item>PushPlus</item>
+        <item>@string/sender_dd</item>
+        <item>@string/sender_email</item>
+        <item>@string/sender_bark</item>
+        <item>@string/sender_webhook</item>
+        <item>@string/sender_qywxgroup</item>
+        <item>@string/sender_qywx</item>
+        <item>@string/sender_server</item>
+        <item>@string/sender_telegram</item>
+        <item>@string/sender_sms</item>
+        <item>@string/sender_feishu</item>
+        <item>@string/sender_plus</item>
     </string-array>
+
+    <string-array name="rule_category">
+        <item>@string/sms</item>
+        <item>@string/call</item>
+        <item>@string/app</item>
+    </string-array>
+
+
+
+    <string-array name="rule_category_value">
+        <item>sms</item>
+        <item>call</item>
+        <item>app</item>
+    </string-array>
+
+
+
+
+    <string-array name="rule_filed">
+        <item>@string/sms_content</item>
+        <item>@string/phone_number</item>
+        <item>@string/package_name</item>
+        <item>@string/inform_content</item>
+    </string-array>
+
+
+    <string-array name="rule_filed_value">
+        <item>msg_content</item>
+        <item>phone_num</item>
+        <item>package_name</item>
+        <item>inform_content</item>
+    </string-array>
+
+
+    <string-array name="rule_filed_value_default">
+    </string-array>
+
+    <string-array name="rule_match_type">
+        <item>@string/btn_is</item>
+        <item>@string/btn_contain</item>
+        <item>@string/btn_not_contain</item>
+        <item>@string/btn_start_with</item>
+        <item>@string/btn_end_with</item>
+        <item>@string/btn_regex</item>
+    </string-array>
+
+
+    <string-array name="rule_match_type_value">
+        <item>is</item>
+        <item>contain</item>
+        <item>notcontain</item>
+        <item>startwith</item>
+        <item>endwith</item>
+        <item>regex</item>
+    </string-array>
+
+    <string-array name="proxy_protocol">
+        <item>@string/proxy_none</item>
+        <item>@string/proxy_http</item>
+        <item>@string/proxy_socks</item>
+    </string-array>
+    <string-array name="proxy_protocol_value">
+        <item>none</item>
+        <item>http</item>
+        <item>socks</item>
+    </string-array>
+    <string-array name="email_protocol">
+        <item>@string/email_smtp</item>
+        <item>@string/email_imap</item>
+    </string-array>
+    <string-array name="email_protocol_value">
+        <item>smtp</item>
+        <item>imap</item>
+    </string-array>
+
+    <string-array name="pushplus_template">
+        <item>html</item>
+        <item>txt</item>
+        <item>json</item>
+        <item>markdown</item>
+        <item>cloudMonitor</item>
+        <item>jenkins</item>
+        <item>route</item>
+    </string-array>
+
+    <string-array name="pushplus_channel">
+        <item>wechat</item>
+        <item>cp</item>
+        <item>mail</item>
+        <item>webhook</item>
+        <item>sms</item>
+    </string-array>
+
 </resources>

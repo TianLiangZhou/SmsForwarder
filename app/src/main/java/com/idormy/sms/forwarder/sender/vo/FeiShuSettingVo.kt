@@ -1,4 +1,4 @@
-package com.idormy.sms.forwarder.data
+package com.idormy.sms.forwarder.sender.vo
 
 @kotlinx.serialization.Serializable
 data class FeiShuSettingVo(

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@+id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.idormy.sms.forwarder.ui.home.HomeFragment"
+        android:label="@string/forward_log"
+        tools:layout="@layout/fragment_home"/>
+
+
+    <fragment
+        android:id="@+id/rule_fragment"
+        android:name="com.idormy.sms.forwarder.ui.rule.RuleFragment"
+        android:label="@string/rule_setting"
+        tools:layout="@layout/fragment_rule"/>
+
+    <fragment
+        android:id="@+id/sender_fragment"
+        android:name="com.idormy.sms.forwarder.ui.sender.SenderFragment"
+        android:label="@string/sender_setting"
+        tools:layout="@layout/fragment_sender"/>
+
+    <fragment
+            android:id="@+id/to_setting"
+            android:name="com.idormy.sms.forwarder.ui.system.SettingFragment"
+            android:label="@string/setting"
+            tools:layout="@layout/fragment_setting"
+            />
+    <fragment
+            android:id="@+id/to_app_list"
+            android:name="com.idormy.sms.forwarder.ui.system.AppFragment"
+            android:label="@string/app_list"
+            tools:layout="@layout/fragment_app"
+            />
+    <fragment
+            android:id="@+id/to_clone"
+            android:name="com.idormy.sms.forwarder.ui.system.CloneFragment"
+            android:label="@string/clone"
+            tools:layout="@layout/fragment_clone"
+            />
+    <fragment
+            android:id="@+id/to_about"
+            android:name="com.idormy.sms.forwarder.ui.system.AboutFragment"
+            android:label="@string/about"
+            tools:layout="@layout/fragment_about"
+            />
+    <fragment
+            android:id="@+id/to_help"
+            android:name="com.idormy.sms.forwarder.ui.system.HelpFragment"
+            android:label="@string/help"
+            />
+</navigation>
