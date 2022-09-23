@@ -22,7 +22,7 @@ object Sms : SenderInterface<SmsSettingVo> {
             index -= 1
         }
         val result = Phone.sendSms(simMutableList[index].subscriptionId, message.content?:"", mobiles)
-        if (result == null) {
+        if (result) {
             logger?.forwardStatus = ResponseState.Success.value
             logger?.forwardResponse = "success"
         } else {

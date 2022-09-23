@@ -8,8 +8,6 @@ import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.BarkSettingVo
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.URLEncoder
@@ -44,12 +42,7 @@ object Bark: SenderInterface<BarkSettingVo> {
             },
             "group", item.icon ?: "", isCopy, copy
         )
-        val response: String = Http.client.get<HttpStatement>(url).execute { response ->
-            if (response.status == HttpStatusCode.NotFound) {
-                return@execute response.readText()
-            }
-            return@execute response.receive<String>()
-        }
+        val response = Http.client.get(url).body<String>();
         if (response.contains("\"code\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

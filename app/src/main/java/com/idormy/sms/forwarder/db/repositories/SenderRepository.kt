@@ -26,7 +26,7 @@ class SenderRepository(private val senderDao: SenderDao) {
 
     suspend fun update(sender: Sender) = senderDao.update(sender)
 
-    val count: Flow<Long> = senderDao.getOnCount()
+    suspend fun count(): Long = senderDao.count()
 
     val all: Flow<List<Sender>> = senderDao.getAll()
 

@@ -8,6 +8,7 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.FeiShuSettingVo
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -30,8 +31,8 @@ object FeiShu : SenderInterface<FeiShuSettingVo> {
             Log.d("sign === ", sign)
         }
         val response: String = Http.client.post(url) {
-            body = postBody.format(timestamp, sign, message.content?:"")
-        }
+            setBody(postBody.format(timestamp, sign, message.content?:""))
+        }.body()
         if (response.contains("\"StatusCode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

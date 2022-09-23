@@ -1,12 +1,16 @@
 package com.idormy.sms.forwarder
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
@@ -21,18 +25,23 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.idormy.sms.forwarder.data.Empty
 import com.idormy.sms.forwarder.databinding.LayoutMainBinding
+import com.idormy.sms.forwarder.provider.Core
 import com.idormy.sms.forwarder.service.FrontService
 import com.idormy.sms.forwarder.ui.ProgressToolbarFragment
 import com.idormy.sms.forwarder.utilities.Action
 import com.idormy.sms.forwarder.utilities.RedirectAppSettingPermission
 import com.idormy.sms.forwarder.view.HomeViewModel
 import com.idormy.sms.forwarder.view.HomeViewModelFactory
+import com.idormy.sms.forwarder.widget.AlertDialogFragment
 import com.idormy.sms.forwarder.widget.ProgressFragment
 import com.idormy.sms.forwarder.widget.hasPermissions
+import com.idormy.sms.forwarder.widget.observe
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,28 +62,50 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fab: FloatingActionButton
 
+    private lateinit var stats: BottomAppBar
+
     lateinit var snackbar: CoordinatorLayout private set
     fun snackbar(text: CharSequence = "") = Snackbar.make(snackbar, text, Snackbar.LENGTH_LONG).apply {
         anchorView = fab
     }
 
-    private val homeViewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory()
-    }
+    private val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(Core.logger, Core.rule, Core.sender) }
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {map ->
-
+        if (map[Manifest.permission.RECEIVE_SMS] == true
+            || map[Manifest.permission.READ_PHONE_STATE] == true
+            || map[Manifest.permission.READ_CALL_LOG] == true
+            || map[Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE] == true) {
+            if (!FrontService.isRunning) {
+                Core.startService()
+            }
+        }
     }
     private val permSetting = registerForActivityResult(RedirectAppSettingPermission()) {}
 
-    private fun toggle() {
-        if (FrontService.isRunning) {
-
-        } else {
-            permissionHandler()
+    class CleanLoggerAlertDialog: AlertDialogFragment<Empty, Empty>() {
+        override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
+            setTitle(R.string.clean_all_prompt)
+            setNegativeButton(R.string.no, listener)
+            setPositiveButton(R.string.yes, listener)
+        }
+    }
+    private fun clean() {
+        CleanLoggerAlertDialog().apply {
+            key(this.javaClass.name)
+        }.show(navHostFragment.childFragmentManager, null)
+        val homeFragment = navHostFragment.childFragmentManager.fragments[0]
+        AlertDialogFragment.setResultListener<CleanLoggerAlertDialog, Empty>(homeFragment) { which, _ ->
+            when(which) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    homeViewModel.clean()
+                    snackbar("已清除所有记录.").show()
+                }
+            }
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LayoutMainBinding.inflate(layoutInflater)
@@ -97,16 +128,36 @@ class MainActivity : AppCompatActivity() {
         )
         navView.setupWithNavController(navController)
         fab = binding.appBarMain.fabService
-        fab.setOnClickListener {toggle()}
-        // navController.addOnDestinationChangedListener {nav, dest, arguments ->
-        // }
+        stats = binding.appBarMain.stats
+        fab.setOnClickListener {clean()}
+         navController.addOnDestinationChangedListener { _, dest, _ ->
+             if (dest.id == R.id.home) {
+                 fab.visibility = View.VISIBLE
+                 stats.visibility = View.VISIBLE
+             } else {
+                 fab.visibility = View.INVISIBLE
+                 stats.visibility = View.INVISIBLE
+             }
+         }
         ViewCompat.setOnApplyWindowInsetsListener(fab) { view, insets ->
             view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                 bottomMargin = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom +
-                        resources.getDimensionPixelOffset(R.dimen.mtrl_bottomappbar_fab_bottom_margin)
+                bottomMargin = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom +
+                    resources.getDimensionPixelOffset(R.dimen.mtrl_bottomappbar_fab_bottom_margin)
             }
             insets
         }
+        with(homeViewModel) {
+            observe(openStats) {
+                binding.appBarMain.failedCnt.text = it.failedCount
+                binding.appBarMain.okCnt.text = it.okCount
+                binding.appBarMain.ruleCnt.text = it.ruleCount
+                binding.appBarMain.senderCnt.text = it.senderCount
+            }
+        }
+        binding.appBarMain.okStats.text = resources.getString(R.string.success_record) + ":"
+        binding.appBarMain.failedStats.text = resources.getString(R.string.failed_record) + ":"
+        binding.appBarMain.ruleStats.text = resources.getString(R.string.rule_setting) + ":"
+        binding.appBarMain.senderStats.text = resources.getString(R.string.sender_setting) + ":"
         permissionHandler()
     }
 
@@ -152,7 +203,16 @@ class MainActivity : AppCompatActivity() {
         } else if (requestPermissions.isNotEmpty()) {
             requestPermissionLauncher.launch(requestPermissions.toTypedArray())
         }
+        if (isStartService && !FrontService.isRunning) {
+            Core.startService()
+        }
     }
+
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.stats()
+    }
+
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

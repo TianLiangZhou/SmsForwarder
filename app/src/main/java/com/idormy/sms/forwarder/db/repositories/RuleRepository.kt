@@ -22,6 +22,8 @@ class RuleRepository(
         ruleDao.delete(id)
     }
 
+    suspend fun count(): Long = ruleDao.count()
+
     @WorkerThread
     suspend fun get(id: Long) = ruleDao.get(id)
 

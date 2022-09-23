@@ -8,6 +8,7 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.DingDingSettingVo
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
@@ -36,20 +37,20 @@ object DingDing : SenderInterface<DingDingSettingVo> {
         if (!url.startsWith("https://", true)) {
             url = "https://oapi.dingtalk.com/robot/send?access_token=$url"
         }
-        if (item.secret != null && item.secret.isNotEmpty()) {
+        if (!item.secret.isNullOrEmpty()) {
             val timestamp = System.currentTimeMillis()
             url += "&timestamp=$timestamp&sign=" + getSign(timestamp, item.secret)
         }
         val requestData = DDMessage(At(emptyList(), emptyList(), false), Content())
          requestData.at?.isAtAll = item.atAll
-        if (item.atMobiles != null && item.atMobiles.isNotEmpty()) {
+        if (!item.atMobiles.isNullOrEmpty()) {
              requestData.at?.atMobiles = item.atMobiles.split(",")
         }
         requestData.text?.content = message.content?:""
         val response: String = Http.client.post(url) {
             contentType(ContentType.Application.Json)
-            body = requestData
-        }
+            setBody(requestData)
+        }.body()
         if (response.contains("\"errcode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

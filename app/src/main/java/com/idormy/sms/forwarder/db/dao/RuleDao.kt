@@ -29,4 +29,7 @@ interface RuleDao {
 
     @Query("SELECT * FROM rule WHERE _id IN (:ids)")
     fun getIdSet(ids: List<Long>): Flow<List<Rule>>
+
+    @Query("SELECT COUNT(_id) FROM rule")
+    suspend fun count(): Long
 }

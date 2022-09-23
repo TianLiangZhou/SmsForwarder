@@ -6,7 +6,6 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.WebNotifySettingVo
-import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -32,7 +31,7 @@ object WebNotify : SenderInterface<WebNotifySettingVo> {
         val response: HttpResponse = Http.client.request(item.webServer) {
             method = httpMethod
             if (method != HttpMethod.Get) {
-                body = TextContent(params, contentType)
+                setBody(TextContent(params, contentType))
             } else {
                 url.takeFrom(item.webServer + "?" + item.webParams)
             }
@@ -40,6 +39,6 @@ object WebNotify : SenderInterface<WebNotifySettingVo> {
         if (response.status == HttpStatusCode.OK) {
             logger?.forwardStatus = ResponseState.Success.value
         }
-        logger?.forwardResponse = response.receive()
+        logger?.forwardResponse = response.bodyAsText()
     }
 }

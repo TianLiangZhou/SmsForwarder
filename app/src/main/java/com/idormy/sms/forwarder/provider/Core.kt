@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.UserManager
 import android.telephony.SmsManager
@@ -36,6 +37,9 @@ object Core : Configuration.Provider {
         } else {
             app.getSystemService(SubscriptionManager::class.java)
         }
+    }
+    val packageManager: PackageManager by lazy {
+        app.packageManager
     }
     val user by lazy { app.getSystemService<UserManager>()!! }
 

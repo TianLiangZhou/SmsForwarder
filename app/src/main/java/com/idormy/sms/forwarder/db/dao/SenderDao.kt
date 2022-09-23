@@ -27,8 +27,8 @@ interface SenderDao {
     @Query("SELECT * FROM sender WHERE _id IN (:ids)")
     fun getIdSet(ids: List<Long>): Flow<List<Sender>>
 
-    @Query("SELECT COUNT(_id) FROM sender WHERE status = 1")
-    fun getOnCount(): Flow<Long>
+    @Query("SELECT COUNT(_id) FROM sender")
+    suspend fun count(): Long
 
     @Update
     suspend fun update(sender: Sender): Int

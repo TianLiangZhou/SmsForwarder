@@ -6,6 +6,7 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.ServerChanSettingVo
+import io.ktor.client.call.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 
@@ -26,7 +27,7 @@ object ServerChan : SenderInterface<ServerChanSettingVo> {
                 append("desp", message.content?:"")
             },
             false
-        )
+        ).body()
         if (response.contains("\"code\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

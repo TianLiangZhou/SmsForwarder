@@ -6,6 +6,7 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.QYWXAppSettingVo
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
@@ -45,8 +46,8 @@ object QYWX : SenderInterface<QYWXAppSettingVo> {
         val sendBody = QYWXAppSendBody("", "", item.agentID, Content(message.content?:""))
         val response: String = Http.client.post(url) {
             contentType(ContentType.Application.Json)
-            body = sendBody
-        }
+            setBody(sendBody)
+        }.body()
         if (response.contains("\"errcode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }
@@ -55,6 +56,6 @@ object QYWX : SenderInterface<QYWXAppSettingVo> {
 
     private suspend fun getAccessToken(corpID: String, secret: String): QYWXAppResult {
         val url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$corpID&corpsecret=$secret"
-        return Http.client.get(url)
+        return Http.client.get(url).body()
     }
 }

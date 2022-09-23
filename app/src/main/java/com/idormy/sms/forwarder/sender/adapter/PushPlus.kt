@@ -6,6 +6,7 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.PushPlusSettingVo
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 
 
@@ -25,18 +26,10 @@ object PushPlus : SenderInterface<PushPlusSettingVo> {
             {"token": "%s", "title": "%s", "content": "%s", "topic": "%s", "template": "%s", "channel": "%s", "webhook": "%s", "callbackUrl":"%s", "timestamp":%d}
         """.trimIndent()
         val response: String = Http.client.post(url) {
-            body = sendBody.format(
-                item.token,
-                message.source?:"",
-                message.content?:"",
-                item.topic ?: "",
-                item.template,
-                item.channel,
-                item.webhook ?: "",
-                item.callbackUrl ?: "",
-                timestamp
+            setBody(
+                sendBody.format(item.token, message.source?:"", message.content?:"", item.topic ?: "", item.template, item.channel, item.webhook ?: "", item.callbackUrl ?: "", timestamp)
             )
-        }
+        }.body()
         if (response.contains("\"code\":200")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

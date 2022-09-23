@@ -21,6 +21,9 @@ class LoggerRepository(private val loggerDao: LoggerDao) {
 
 
 
+    suspend fun okCount(): Long = loggerDao.okCount()
+    suspend fun failedCount(): Long = loggerDao.failedCount()
+
     @WorkerThread
     suspend fun delete(id: Long) {
         loggerDao.delete(id)

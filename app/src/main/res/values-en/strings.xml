@@ -295,6 +295,7 @@
     <string name="password">Password</string>
 
     <string name="unsaved_changes_prompt">Changes not saved. Do you want to save?</string>
+    <string name="clean_all_prompt">Clear all log records, are you sure?</string>
 
     <string name="test_origin">origin</string>
 

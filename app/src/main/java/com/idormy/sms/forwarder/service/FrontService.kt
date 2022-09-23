@@ -2,13 +2,18 @@ package com.idormy.sms.forwarder.service
 
 import android.annotation.SuppressLint
 import android.app.*
+import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationManagerCompat
 import com.idormy.sms.forwarder.MainActivity
 import com.idormy.sms.forwarder.R
+import com.idormy.sms.forwarder.provider.Core
 import com.idormy.sms.forwarder.utilities.BuildProperties
+
 
 class FrontService : Service() {
 
@@ -48,38 +53,31 @@ class FrontService : Service() {
         }
         val notification = builder.build()
         startForeground(1, notification)
-
-        //检查权限是否获取
-        //PackageManager pm = getPackageManager();
-        //PhoneUtils.CheckPermission(pm, this);
-
         //Android8.1以下尝试启动主界面，以便动态获取权限
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
-        // 手机重启，未打开app时，主动获取SIM卡信息
-//        if (MyApplication.SimInfoList.isEmpty()) {
-//            PhoneUtils.init(this)
-//            MyApplication.SimInfoList = PhoneUtils.simMultiInfo
-//        }
-//        if (switchEnableAppNotify && isNotificationListenerServiceEnabled(this)) {
-//            toggleNotificationListenerService(this)
-//        }
+        val enabledListenerPackages = NotificationManagerCompat.getEnabledListenerPackages(applicationContext)
+        if (Core.dataStore.switchNotify && enabledListenerPackages.contains(applicationContext.packageName)) {
+            Core.packageManager.setComponentEnabledSetting(
+                ComponentName(Core.app.applicationContext, NotifyService::class.java),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
+            )
+            Core.packageManager.setComponentEnabledSetting(
+                ComponentName(Core.app.applicationContext, NotifyService::class.java),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
+            )
+        }
     }
 
     override fun onDestroy() {
-        // 进行自动重启
-        // val intent = Intent(this@FrontService, FrontService::class.java)
-        // 重新开启服务
-        // startService(intent)
         stopForeground(true)
         isRunning = false
         super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        //return super.onStartCommand(intent, flags, startId);
         isRunning = true
         return START_STICKY //保证service不被杀死
     }

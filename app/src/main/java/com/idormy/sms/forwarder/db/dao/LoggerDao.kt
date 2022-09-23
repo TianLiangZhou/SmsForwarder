@@ -26,4 +26,10 @@ interface LoggerDao {
 
     @Query("SELECT * FROM log ORDER BY _id DESC LIMIT :limit OFFSET :offset")
     fun page(offset: Int, limit: Int): Flow<List<Logger>>
+
+    @Query("SELECT COUNT(_id) FROM log WHERE forward_status = 2")
+    suspend fun okCount(): Long
+
+    @Query("SELECT COUNT(_id) FROM log WHERE forward_status = 0")
+    suspend fun failedCount(): Long
 }

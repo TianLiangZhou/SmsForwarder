@@ -14,21 +14,22 @@
         android:id="@+id/include"/>
 
 
-    <com.idormy.sms.forwarder.widget.ServiceFloatingButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="6dp"
             android:nextFocusDown="@id/stats"
-            app:backgroundTint="@color/background_service"
+            android:contentDescription="@string/bt_refresh_log"
+            app:tint="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal"
             app:pressedTranslationZ="6dp"
-            android:tint="@android:color/white"
-            app:srcCompat="@drawable/ic_round_send_24"
+            app:srcCompat="@drawable/ic_round_delete_24"
             app:layout_anchorGravity="bottom|center"
             app:layout_anchor="@+id/stats"/>
 
-    <com.idormy.sms.forwarder.widget.StatsBar
+    <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/stats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,6 +39,92 @@
             app:backgroundTint="@color/backgroundStat"
             app:contentInsetStart="0dp"
             app:layout_scrollFlags="enterAlways|scroll"
-            app:hideOnScroll="true"/>
+            app:hideOnScroll="true">
+        <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:columnCount="4"
+                android:padding="16dip">
+
+            <TextView
+                    android:id="@+id/okStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="14sp"
+                    android:layout_gravity="start"/>
+
+            <TextView
+                    android:id="@+id/okCnt"
+                    android:paddingHorizontal="8dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"/>
+            <TextView
+                    android:id="@+id/failedStats"
+                    android:paddingHorizontal="8dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="14sp"
+                    android:layout_gravity="end"/>
+
+            <TextView
+                    android:id="@+id/failedCnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"/>
+
+
+
+            <TextView
+                    android:id="@+id/ruleStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    android:layout_gravity="start"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    />
+
+            <TextView
+                    android:id="@+id/ruleCnt"
+                    android:paddingHorizontal="8dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    android:layout_row="1"
+                    />
+
+            <TextView
+                    android:id="@+id/senderStats"
+                    android:paddingHorizontal="8dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    android:layout_gravity="end"
+                    android:layout_row="1"
+                    />
+
+
+            <TextView
+                    android:id="@+id/senderCnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="14sp"
+                    android:layout_row="1"
+                    />
+
+        </GridLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

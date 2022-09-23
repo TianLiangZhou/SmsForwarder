@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.utilities.Mode
 import com.idormy.sms.forwarder.utilities.RuleKey
+import com.idormy.sms.forwarder.utilities.Status
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.util.*
@@ -31,6 +32,7 @@ data class Rule(
     @ColumnInfo(name = "sms_template")var smsTemplate: String = "",
     @ColumnInfo(name = "regex_replace")var regexReplace: String = "",
     @ColumnInfo(name = "time")var time: Long = Date().time,
+    @ColumnInfo(name = "status")var status: Int = Status.Off.value,
 ) : Parcelable {
 
     @IgnoredOnParcel

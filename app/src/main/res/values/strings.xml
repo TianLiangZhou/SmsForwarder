@@ -30,6 +30,9 @@
     </plurals>
     <string name="undo">"撤销"</string>
 
+    <string name="success_record">成功记录</string>
+    <string name="failed_record">失败记录</string>
+
     <!--AboutActivity-->
     <string name="version">当前版本</string>
     <string name="check_for_updates">检查新版本</string>
@@ -292,7 +295,8 @@
     <string name="username">用户</string>
     <string name="password">密码</string>
 
-    <string name="unsaved_changes_prompt">"是否要保存修改？"</string>
+    <string name="unsaved_changes_prompt">是否要保存修改？</string>
+    <string name="clean_all_prompt">是否清除全部转发记录?</string>
     <string name="test_origin">来源</string>
     <string name="sender_dd">钉钉机器人</string>
     <string name="sender_email">邮箱</string>
@@ -307,7 +311,7 @@
     <string name="sender_plus">PushPlus</string>
 
 
-    <string name="direct_boot_aware">"允许锁屏时切换"</string>
-    <string name="direct_boot_aware_summary">"选中的配置信息会不那么安全"</string>
+    <string name="direct_boot_aware">允许锁屏时切换</string>
+    <string name="direct_boot_aware_summary">选中的配置信息会不那么安全</string>
 
 </resources>

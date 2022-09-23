@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -54,15 +55,16 @@ class HomepageFragment(val type: MessageType) : Fragment(), BaseAdapter.Listener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val listView = binding.listView
-        listView.layoutManager = LinearLayoutManager(requireActivity(),  RecyclerView.VERTICAL, false)
-        adapter.listener = this
-        binding.swipeRefresh.setOnRefreshListener {
-            adapter.refresh()
-        }
+        listView.layoutManager = LinearLayoutManager(requireContext(),  RecyclerView.VERTICAL, false)
+        listView.addItemDecoration(DividerItemDecoration(requireContext(), (listView.layoutManager as LinearLayoutManager).orientation))
         listView.adapter = adapter.withLoadStateHeaderAndFooter(
             header = PagingLoadStateAdapter(adapter),
             footer = PagingLoadStateAdapter(adapter)
         )
+        adapter.listener = this
+        binding.swipeRefresh.setOnRefreshListener {
+            adapter.refresh()
+        }
         with(loggerViewModel) {
             observe(progressLiveEvent) { show ->
                 if (show) (activity as MainActivity).showProgress()

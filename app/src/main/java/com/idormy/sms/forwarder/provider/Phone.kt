@@ -37,22 +37,27 @@ object Phone {
     }
 
 
-    fun sendSms(subId: Int, message: String, mobiles: List<String>) {
+    fun sendSms(subId: Int, message: String, mobiles: List<String>): Boolean {
         val smsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Core.smsManager.createForSubscriptionId(subId)
         } else {
             SmsManager.getSmsManagerForSubscriptionId(subId)
         }
-        for (mobile in mobiles) {
-            val divideMessage = smsManager.divideMessage(message)
-            smsManager.sendMultipartTextMessage(
-                mobile,
-                null,
-                divideMessage,
-                null,
-                null
-            )
-        }
+        var r = false
+        try {
+            for (mobile in mobiles) {
+                val divideMessage = smsManager.divideMessage(message)
+                smsManager.sendMultipartTextMessage(
+                    mobile,
+                    null,
+                    divideMessage,
+                    null,
+                    null
+                )
+            }
+            r = true
+        } catch (_: RuntimeException) { }
+        return r
     }
 
     fun lastCallRecords(phoneNumber: String): CallInfo? {

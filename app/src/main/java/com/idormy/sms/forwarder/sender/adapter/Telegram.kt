@@ -6,6 +6,7 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.TelegramSettingVo
+import io.ktor.client.call.*
 import io.ktor.client.engine.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -46,8 +47,8 @@ object Telegram : SenderInterface<TelegramSettingVo> {
             }
             val response: String = Http.client.post(url) {
                 contentType(ContentType.Application.Json)
-                body = TelegramSendBody(item.chatId, message.content?:"", "HTML")
-            }
+                setBody(TelegramSendBody(item.chatId, message.content?:"", "HTML"))
+            }.body()
             if (response.contains("\"ok\":true")) {
                 logger?.forwardStatus = ResponseState.Success.value
             }

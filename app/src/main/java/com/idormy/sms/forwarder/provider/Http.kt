@@ -3,10 +3,12 @@ package com.idormy.sms.forwarder.provider
 import com.idormy.sms.forwarder.BuildConfig
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
+
 
 object Http {
     val client = HttpClient(Android) {
@@ -14,9 +16,10 @@ object Http {
         install(HttpTimeout) {
             requestTimeoutMillis = 3000
         }
-        install(JsonFeature) {
-            serializer = KotlinxSerializer( kotlinx.serialization.json.Json {
+        install(ContentNegotiation) {
+            json(Json {
                 prettyPrint = true
+                isLenient = true
                 isLenient = true
                 encodeDefaults = true
                 ignoreUnknownKeys = true

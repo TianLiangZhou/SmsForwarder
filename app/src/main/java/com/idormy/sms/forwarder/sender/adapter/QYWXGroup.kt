@@ -6,6 +6,7 @@ import com.idormy.sms.forwarder.provider.Http
 import com.idormy.sms.forwarder.sender.ResponseState
 import com.idormy.sms.forwarder.sender.SenderInterface
 import com.idormy.sms.forwarder.sender.vo.QYWXGroupRobotSettingVo
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 
 object QYWXGroup : SenderInterface<QYWXGroupRobotSettingVo> {
@@ -20,8 +21,8 @@ object QYWXGroup : SenderInterface<QYWXGroupRobotSettingVo> {
         }
         val sendBody = "{\"msgtype\":\"text\",\"text\": {\"content\": \"%s\"}}"
         val response: String = Http.client.post(url) {
-            body = sendBody.format(message.content?:"")
-        }
+            setBody(sendBody.format(message.content?:""))
+        }.body()
         if (response.contains("\"errcode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

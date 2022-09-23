@@ -12,10 +12,6 @@ class SenderViewModel(private val repository: SenderRepository) : BaseViewModel(
 
     val senders: LiveData<List<Sender>> = _senders
 
-    val count = repository.count.asLiveData()
-
-    val enables = repository.enables.asLiveData()
-
     fun loadAllSender() = launchAsync({
         repository.all
     }, {
