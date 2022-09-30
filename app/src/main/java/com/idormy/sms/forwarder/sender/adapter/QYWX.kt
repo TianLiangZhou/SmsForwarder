@@ -1,5 +1,6 @@
 package com.idormy.sms.forwarder.sender.adapter
 
+import android.util.Log
 import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.db.model.Logger
 import com.idormy.sms.forwarder.provider.Http
@@ -48,6 +49,7 @@ object QYWX : SenderInterface<QYWXAppSettingVo> {
             contentType(ContentType.Application.Json)
             setBody(sendBody)
         }.body()
+        Log.d("Http WX = ", response)
         if (response.contains("\"errcode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

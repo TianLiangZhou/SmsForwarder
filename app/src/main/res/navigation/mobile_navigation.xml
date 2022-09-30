@@ -28,37 +28,30 @@
         tools:layout="@layout/fragment_sender"/>
 
     <fragment
-            android:id="@+id/to_setting"
+            android:id="@+id/setting"
             android:tag="setting"
             android:name="com.idormy.sms.forwarder.ui.system.SettingFragment"
             android:label="@string/setting"
             tools:layout="@layout/fragment_setting"
             />
     <fragment
-            android:id="@+id/to_app_list"
+            android:id="@+id/app_list"
             android:tag="app"
             android:name="com.idormy.sms.forwarder.ui.system.AppFragment"
             android:label="@string/app_list"
             tools:layout="@layout/fragment_app"
             />
     <fragment
-            android:id="@+id/to_clone"
+            android:id="@+id/clone"
             android:tag="clone"
             android:name="com.idormy.sms.forwarder.ui.system.CloneFragment"
             android:label="@string/clone"
             tools:layout="@layout/fragment_clone"
             />
     <fragment
-            android:id="@+id/to_about"
+            android:id="@+id/about"
             android:tag="about"
             android:name="com.idormy.sms.forwarder.ui.system.AboutFragment"
             android:label="@string/about"
-            tools:layout="@layout/fragment_about"
-            />
-    <fragment
-            android:id="@+id/to_help"
-            android:tag="help"
-            android:name="com.idormy.sms.forwarder.ui.system.HelpFragment"
-            android:label="@string/help"
             />
 </navigation>

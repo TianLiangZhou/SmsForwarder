@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:keepScreenOn="true">
+
+    <androidx.camera.view.PreviewView
+            android:id="@+id/camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    </androidx.camera.view.PreviewView>
+
+    <FrameLayout
+            android:id="@+id/static_overlay_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent">
+
+        <com.idormy.sms.forwarder.barcode.GraphicOverlay
+                android:id="@+id/graphic_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <com.google.android.material.chip.Chip
+                android:id="@+id/bottom_prompt_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/bottom_prompt_chip_margin_bottom"
+                android:layout_gravity="bottom|center_horizontal"
+                android:checkable="false"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/white"
+                android:textSize="@dimen/bottom_prompt_chip_text_size"
+                android:visibility="gone"
+                app:chipCornerRadius="@dimen/bottom_prompt_chip_corner_radius"
+                app:chipSurfaceColor="@color/dark"
+                app:closeIconVisible="false"/>
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

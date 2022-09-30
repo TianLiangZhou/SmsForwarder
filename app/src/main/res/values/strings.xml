@@ -12,6 +12,7 @@
     <string name="clone">一键克隆</string>
     <string name="setting">通用设置</string>
     <string name="about">关于软件</string>
+    <string name="about_title">关于软件 %s</string>
     <string name="help">使用帮助</string>
     <string name="add">添加</string>
     <string name="editor">编辑</string>
@@ -313,5 +314,18 @@
 
     <string name="direct_boot_aware">允许锁屏时切换</string>
     <string name="direct_boot_aware_summary">选中的配置信息会不那么安全</string>
+
+    <string name="git_home_url">https://github.com/TianLiangZhou/SmsForwarder-Kotlin</string>
+
+    <string name="add_config_methods_scan_qr_code">扫描二维码</string>
+    <string name="add_config_methods_manual_settings">手动设置</string>
+
+    <string name="action_import_file">从文件导入…</string>
+    <string name="add_profile_scanner_permission_required">扫描二维码需要获得使用相机的权限。</string>
+
+    <string name="scanner_close_button">返回</string>
+    <string name="scanner_flash_button">切换闪光灯</string>
+    <string name="barcode_result">扫描结果</string>
+
 
 </resources>

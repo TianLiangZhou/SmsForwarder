@@ -1,5 +1,6 @@
 package com.idormy.sms.forwarder.view
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.idormy.sms.forwarder.db.model.Sender
 import com.idormy.sms.forwarder.db.repositories.SenderRepository
@@ -23,19 +24,23 @@ class SenderViewModel(private val repository: SenderRepository) : BaseViewModel(
     })
 
     fun save(sender: Sender) {
-        viewModelScope.launch {
+        launchAsync({
             if (sender.id > 0) {
                 repository.update(sender)
             } else {
                 repository.insert(sender)
             }
-        }
+        }, {
+            Log.d("SenderModel", "update insert sender $sender")
+        })
     }
 
     fun delete(id: Long) {
-        viewModelScope.launch {
+        launchAsync({
             repository.delete(id)
-        }
+        },{
+            Log.d("SenderModel", "delete sender $id")
+        })
     }
 
     suspend fun get(id: Long) = repository.get(id)

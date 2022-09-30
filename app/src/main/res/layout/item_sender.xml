@@ -61,6 +61,17 @@
             android:padding="12dp"
             app:srcCompat="@drawable/ic_round_content_copy_24"/>
 
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/shareSender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:contentDescription="@string/clone"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:padding="12dp"
+                app:srcCompat="@drawable/ic_round_qr_code_2_24"/>
+
     </LinearLayout>
 
     <RelativeLayout

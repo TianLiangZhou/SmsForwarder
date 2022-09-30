@@ -110,7 +110,9 @@ abstract class ForwarderDatabase : RoomDatabase() {
                 try {
                     database.execSQL("ALTER TABLE `rule` ADD COLUMN `status` INTEGER")
                 } catch (_: SQLException) {}
-                database.execSQL("INSERT INTO `rule_tmp` (`_id`, `name`, `type`, `filed`, `tcheck`, `value`, `sender_id`, `sim_slot`, `sms_template`, `regex_replace`, `time`) SELECT `_id`, `name`, `type`, `filed`, `tcheck`, `value`, `sender_id`, `sim_slot`, `sms_template`, `regex_replace`, `time` FROM `rule`")
+                database.execSQL(
+                    "INSERT INTO `rule_tmp` (`_id`, `name`, `type`, `filed`, `tcheck`, `value`, `sender_id`, `sim_slot`, `sms_template`, `regex_replace`, `time`, `status`) " +
+                            "SELECT `_id`, `name`, `type`, `filed`, `tcheck`, `value`, `sender_id`, `sim_slot`, `sms_template`, `regex_replace`, `time`, `status` FROM `rule`")
                 database.execSQL("DROP TABLE IF EXISTS `rule`")
                 database.execSQL("ALTER TABLE `rule_tmp` RENAME TO `rule`")
 

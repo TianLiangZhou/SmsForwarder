@@ -1,5 +1,6 @@
 package com.idormy.sms.forwarder.sender.adapter
 
+import android.util.Log
 import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.db.model.Logger
 import com.idormy.sms.forwarder.provider.Http
@@ -49,6 +50,7 @@ object Telegram : SenderInterface<TelegramSettingVo> {
                 contentType(ContentType.Application.Json)
                 setBody(TelegramSendBody(item.chatId, message.content?:"", "HTML"))
             }.body()
+            Log.d("Http tt = ", response)
             if (response.contains("\"ok\":true")) {
                 logger?.forwardStatus = ResponseState.Success.value
             }

@@ -33,6 +33,7 @@ object FeiShu : SenderInterface<FeiShuSettingVo> {
         val response: String = Http.client.post(url) {
             setBody(postBody.format(timestamp, sign, message.content?:""))
         }.body()
+        Log.d("Http feishu = ", response)
         if (response.contains("\"StatusCode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

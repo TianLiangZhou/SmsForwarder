@@ -26,7 +26,7 @@ object Http {
             })
         }
         install(Logging) {
-            logger = Logger.DEFAULT
+            logger = Logger.ANDROID
             level = if (BuildConfig.DEBUG) {
                 LogLevel.ALL
             } else {

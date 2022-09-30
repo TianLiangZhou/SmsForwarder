@@ -121,7 +121,10 @@ class HomepageFragment(val type: MessageType) : Fragment(), BaseAdapter.Listener
     }
 
     override fun onLongClick(view: View, item: LoggerAndRuleAndSender): Boolean {
-        TODO("Not yet implemented")
+        return true
+    }
+
+    override fun onShare(item: LoggerAndRuleAndSender) {
     }
 
 }

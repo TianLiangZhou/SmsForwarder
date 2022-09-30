@@ -3,7 +3,7 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/main" android:checkableBehavior="single">
         <item
                 android:id="@+id/home"
                 android:icon="@drawable/ic_round_format_list_bulleted_24"
@@ -19,35 +19,35 @@
                 android:icon="@drawable/ic_round_send_24"
                 android:title="@string/sender_setting"/>
 
-
-
         <item
-                android:id="@+id/to_app_list"
+                android:id="@+id/app_list"
                 android:orderInCategory="100"
                 android:title="@string/app_list"
                 android:icon="@drawable/ic_app"
                 />
 
         <item
-                android:id="@+id/to_setting"
+                android:id="@+id/setting"
                 android:orderInCategory="100"
                 android:title="@string/setting"
                 android:icon="@drawable/ic_settings"
                  />
         <item
-                android:id="@+id/to_clone"
+                android:id="@+id/clone"
                 android:orderInCategory="100"
                 android:title="@string/clone"
                 android:icon="@drawable/ic_clone"
                  />
+    </group>
+    <group android:id="@+id/misc" android:checkableBehavior="single">
         <item
-                android:id="@+id/to_about"
+                android:id="@+id/about"
                 android:orderInCategory="100"
                 android:title="@string/about"
                 android:icon="@drawable/ic_forwarder"
                  />
         <item
-                android:id="@+id/to_help"
+                android:id="@+id/help"
                 android:orderInCategory="100"
                 android:title="@string/help"
                 android:icon="@drawable/ic_help"

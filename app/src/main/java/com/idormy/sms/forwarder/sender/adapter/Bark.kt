@@ -1,5 +1,6 @@
 package com.idormy.sms.forwarder.sender.adapter
 
+import android.util.Log
 import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.db.model.Logger
 import com.idormy.sms.forwarder.provider.Http
@@ -43,6 +44,7 @@ object Bark: SenderInterface<BarkSettingVo> {
             "group", item.icon ?: "", isCopy, copy
         )
         val response = Http.client.get(url).body<String>();
+        Log.d("Http bk = ", response)
         if (response.contains("\"code\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

@@ -54,6 +54,7 @@ object Forwarder {
                     val item = sender.setting ?: sender.decodeSetting<PushPlusSettingVo>()
                     PushPlus.send(item as PushPlusSettingVo, message, logger)
                 }
+                else -> {}
             }
         } catch (ex: Throwable) {
             logger?.forwardResponse = ex.message?:"send exception"

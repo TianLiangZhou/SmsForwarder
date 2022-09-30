@@ -4,6 +4,8 @@ buildscript {
     ext.kotlin_version = '1.7.10'
     ext.ktor_version = '2.1.1'
     ext.paging_version = "3.1.1"
+    ext.camerax_version = "1.2.0-beta01"
+
     repositories {
         google()
         mavenCentral()

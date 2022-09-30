@@ -1,29 +1,31 @@
 package com.idormy.sms.forwarder.view
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.idormy.sms.forwarder.db.model.Rule
 import com.idormy.sms.forwarder.db.model.RuleAndSender
 import com.idormy.sms.forwarder.db.repositories.RuleRepository
-import kotlinx.coroutines.launch
 
 class RuleViewModel(private val repository: RuleRepository) : BaseViewModel() {
 
 //    val rules = repository.all.asLiveData()
 
     fun save(rule: Rule) {
-        viewModelScope.launch {
+        launchAsync({
             if (rule.id > 0) {
                 repository.update(rule)
             } else {
                 repository.insert(rule)
             }
-        }
+        }, {})
     }
 
     fun delete(id: Long) {
-        viewModelScope.launch {
+        launchAsync({
             repository.delete(id)
-        }
+        },{})
     }
 
     suspend fun get(id: Long) = repository.get(id)

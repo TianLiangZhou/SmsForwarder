@@ -9,9 +9,23 @@
         android:fitsSystemWindows="true"
         tools:context=".MainActivity">
 
-    <include
-        layout="@layout/content_main"
-        android:id="@+id/include"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:fitsSystemWindows="true">
+        <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_holder"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/mobile_navigation"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -53,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="14sp"
+                    android:text="@string/success_record"
                     android:layout_gravity="start"/>
 
             <TextView
@@ -69,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="14sp"
+                    android:text="@string/failed_record"
                     android:layout_gravity="end"/>
 
             <TextView
@@ -89,6 +105,7 @@
                     android:layout_gravity="start"
                     android:layout_row="1"
                     android:layout_column="0"
+                    android:text="@string/rule_setting"
                     />
 
             <TextView
@@ -110,6 +127,7 @@
                     android:textSize="14sp"
                     android:layout_gravity="end"
                     android:layout_row="1"
+                    android:text="@string/sender_setting"
                     />
 
 

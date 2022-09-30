@@ -127,6 +127,8 @@ class KeyValueRepository(val store: RoomPreferenceDataStore) : OnPreferenceDataS
                         callbackUrl = json.callbackUrl ?:""
                         validTime = json.validTime?:""
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -190,6 +192,8 @@ class KeyValueRepository(val store: RoomPreferenceDataStore) : OnPreferenceDataS
                     Types.PushPlus -> {
                         item.setting = PushPlusSettingVo(token, topic, template, channel, callbackUrl, validTime)
                     }
+
+                    else -> {}
                 }
             }
             else -> {}

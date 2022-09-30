@@ -36,6 +36,11 @@ class SenderAdapter : BaseAdapter<Sender>() {
                     onCopy(item)
                 }
             }
+            binding.shareSender.setOnClickListener {
+                listener?.apply {
+                    onShare(item)
+                }
+            }
         }
         override fun onClick(p0: View) {
             listener?.apply {
@@ -58,8 +63,6 @@ class SenderAdapter : BaseAdapter<Sender>() {
             binding.senderImage.isEnabled = false
             binding.senderName.text = data.name
             binding.date.text = "最近发送: " + SimpleDateFormat("MM/dd HH:mm", Locale.CHINA).format(Date(data.time))
-
-            println(data)
             itemView.isSelected = data.status == Status.On.value
         }
     }

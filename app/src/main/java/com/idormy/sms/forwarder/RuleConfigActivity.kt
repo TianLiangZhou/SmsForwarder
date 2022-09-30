@@ -37,7 +37,7 @@ class RuleConfigActivity : AppCompatActivity() {
         supportActionBar!!.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_round_close_24)
-            title = resources.getString(R.string.new_rule)
+            setTitle(R.string.new_rule)
         }
     }
 

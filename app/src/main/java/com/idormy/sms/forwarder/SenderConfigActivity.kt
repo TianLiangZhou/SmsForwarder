@@ -93,6 +93,7 @@ class SenderConfigActivity : AppCompatActivity() {
             Types.SMS -> SmsPreferenceFragment()
             Types.FeiShu -> FeishuPreferenceFragment()
             Types.PushPlus -> PushPlusPreferenceFragment()
+            else -> DingDingPreferenceFragment()
         }
     }
 

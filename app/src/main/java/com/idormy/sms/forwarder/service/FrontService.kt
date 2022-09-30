@@ -1,7 +1,8 @@
 package com.idormy.sms.forwarder.service
 
-import android.annotation.SuppressLint
 import android.app.*
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -17,7 +18,6 @@ import com.idormy.sms.forwarder.utilities.BuildProperties
 
 class FrontService : Service() {
 
-    @SuppressLint("IconColors", "UnspecifiedImmutableFlag")
     override fun onCreate() {
         super.onCreate()
         isRunning = true
@@ -39,8 +39,8 @@ class FrontService : Service() {
             println(e)
         }
         builder.setContentText(getString(R.string.notification_content))
-        val intent = Intent(this, MainActivity::class.java);
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val intent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
         builder.setContentIntent(pendingIntent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //修改安卓8.1以上系统报错

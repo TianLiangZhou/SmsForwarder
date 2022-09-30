@@ -55,6 +55,7 @@ data class Sender (
             Types.SMS -> Json.encodeToString(setting as SmsSettingVo)
             Types.FeiShu -> Json.encodeToString(setting as FeiShuSettingVo)
             Types.PushPlus -> Json.encodeToString(setting as PushPlusSettingVo)
+            else -> ""
         }
     }
 

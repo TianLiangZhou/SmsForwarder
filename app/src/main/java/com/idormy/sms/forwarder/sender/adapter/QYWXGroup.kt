@@ -1,5 +1,6 @@
 package com.idormy.sms.forwarder.sender.adapter
 
+import android.util.Log
 import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.db.model.Logger
 import com.idormy.sms.forwarder.provider.Http
@@ -23,6 +24,7 @@ object QYWXGroup : SenderInterface<QYWXGroupRobotSettingVo> {
         val response: String = Http.client.post(url) {
             setBody(sendBody.format(message.content?:""))
         }.body()
+        Log.d("Http WXGROUP = ", response)
         if (response.contains("\"errcode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

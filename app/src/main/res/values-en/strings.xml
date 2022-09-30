@@ -12,6 +12,7 @@
     <string name="clone">Clone</string>
     <string name="setting">Settings</string>
     <string name="about">About</string>
+    <string name="about_title">About %s</string>
     <string name="help">Help</string>
     <string name="add">Add</string>
     <string name="editor">editor</string>
@@ -313,6 +314,17 @@
 
     <string name="direct_boot_aware">Allow Toggling in Lock Screen</string>
     <string name="direct_boot_aware_summary">Your selected profile information will be less protected</string>
+
+    <string name="git_home_url">https://github.com/TianLiangZhou/SmsForwarder-Kotlin</string>
+
+    <string name="add_config_methods_scan_qr_code">Scan QR code</string>
+    <string name="add_config_methods_manual_settings">Manual Settings</string>
+    <string name="action_import_file">Import from file…</string>
+    <string name="add_profile_scanner_permission_required">Camera permission is required for scanning QR code.</string>
+
+    <string name="scanner_close_button">Back</string>
+    <string name="scanner_flash_button">Toggle camera flash</string>
+    <string name="barcode_result">Scan results</string>
 
 
 </resources>

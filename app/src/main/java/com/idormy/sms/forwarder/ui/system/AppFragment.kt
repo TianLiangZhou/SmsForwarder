@@ -104,4 +104,8 @@ class AppFragment : ProgressToolbarFragment(), BaseAdapter.Listener<AppInfo> {
         startActivity(intent)
         return true
     }
+
+    override fun onShare(item: AppInfo) {
+        TODO("Not yet implemented")
+    }
 }

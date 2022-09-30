@@ -1,5 +1,6 @@
 package com.idormy.sms.forwarder.sender.adapter
 
+import android.util.Log
 import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.db.model.Logger
 import com.idormy.sms.forwarder.provider.Http
@@ -39,6 +40,8 @@ object WebNotify : SenderInterface<WebNotifySettingVo> {
         if (response.status == HttpStatusCode.OK) {
             logger?.forwardStatus = ResponseState.Success.value
         }
-        logger?.forwardResponse = response.bodyAsText()
+        val text = response.bodyAsText()
+        logger?.forwardResponse = text
+        Log.d("Http web = ", text)
     }
 }

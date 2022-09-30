@@ -35,6 +35,11 @@ class RuleAdapter : BaseAdapter<RuleAndSender>() {
                     onCopy(item)
                 }
             }
+            binding.shareRule.setOnClickListener {
+                listener?.apply {
+                    onShare(item)
+                }
+            }
         }
         override fun onClick(view: View) {
             listener?.apply {

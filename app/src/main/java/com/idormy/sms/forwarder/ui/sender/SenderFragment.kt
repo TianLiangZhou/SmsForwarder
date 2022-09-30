@@ -2,6 +2,7 @@ package com.idormy.sms.forwarder.ui.sender
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -27,6 +29,7 @@ import androidx.work.workDataOf
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idormy.sms.forwarder.MainActivity
 import com.idormy.sms.forwarder.R
+import com.idormy.sms.forwarder.ScannerActivity
 import com.idormy.sms.forwarder.SenderConfigActivity
 import com.idormy.sms.forwarder.adapter.BaseAdapter
 import com.idormy.sms.forwarder.adapter.SenderAdapter
@@ -47,8 +50,9 @@ import com.idormy.sms.forwarder.widget.observe
 import com.idormy.sms.forwarder.workers.UpdateSenderWorker
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.json.JSONObject
 
-class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener, BaseAdapter.Listener<Sender> {
+class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener, DialogInterface.OnClickListener, BaseAdapter.Listener<Sender> {
 
     private var _binding: FragmentSenderBinding? = null
 
@@ -64,12 +68,21 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
             .create()
     }
 
+    private val scannerResultDialog by lazy {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("扫描结果")
+            .setPositiveButton("导入", this)
+            .setNeutralButton("取消", this)
+            .setCancelable(false)
+            .create()
+    }
+
     private val senderSets by lazy { resources.getStringArray(R.array.add_sender_menu) }
 
     private val adapter: SenderAdapter by lazy { SenderAdapter() }
 
     private val undoManager: UndoSnackbarManager<Sender> by lazy {
-        UndoSnackbarManager(requireActivity() as MainActivity, adapter::undo, adapter::commit)
+        UndoSnackbarManager(main, adapter::undo, adapter::commit)
     }
 
     private val senderViewModel: SenderViewModel by activityViewModels { SenderViewModelFactory(Core.sender) }
@@ -81,16 +94,29 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
     }
     private val main: MainActivity by lazy { requireActivity() as MainActivity }
 
+    private var scannedResult: String? = null
+
+    private val startScannerForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK && result.data?.hasExtra("scanned_result") == true) {
+            scannedResult = result.data?.getStringExtra("scanned_result")
+            scannerResultDialog.setMessage(
+                if (scannedResult!!.startsWith("{") ||  scannedResult!!.startsWith("["))
+                    JSONObject(scannedResult!!).toString(4)
+                else scannedResult
+            )
+            scannerResultDialog.show()
+        }
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSenderBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.inflateMenu(R.menu.create_config)
+        toolbar.inflateMenu(R.menu.config_manager_menu)
         toolbar.setOnMenuItemClickListener(this)
         toolbar.setTitle(R.string.sender_setting)
         changedData = mutableListOf()
@@ -171,14 +197,18 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         changedData = null
         Core.sender.listener = null
+        super.onDestroy()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.add -> {
+            R.id.action_scan_qr_code -> {
+                startScannerForResult.launch(Intent(context, ScannerActivity::class.java))
+                true
+            }
+            R.id.action_manual_settings -> {
                 dialog.show()
                 true
             }
@@ -201,7 +231,15 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
     }
 
     override fun onCopy(item: Sender) {
+        item.id = 0
+        item.name += "[副本]"
+        senderViewModel.save(item)
+    }
 
+    override fun onShare(item: Sender) {
+        if (!parentFragmentManager.isStateSaved) {
+            MainActivity.QRCodeDialog(item.toString()).show(parentFragmentManager, null)
+        }
     }
 
     override fun onDelete(item: Sender) {
@@ -217,6 +255,38 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
             item.status = if (view.isSelected) Status.On.value else Status.Off.value
             changedData!!.add(item)
         }
+    }
+
+    override fun onClick(dialog: DialogInterface?, flag: Int) {
+        if (flag != DialogInterface.BUTTON_POSITIVE) {
+            return
+        }
+        if (scannedResult.isNullOrEmpty()) {
+            return
+        }
+        if (!scannedResult!!.startsWith("{")) {
+            return
+        }
+        val obj = JSONObject(scannedResult!!)
+        if (!obj.has("type")) {
+            return
+        }
+        val type = obj.getInt("type")
+        if (Types.from(type) == null) {
+            return
+        }
+        val sender = Sender()
+        sender.type = type
+        if (obj.has("name")) {
+            sender.name = obj.getString("name")
+        }
+        if (obj.has("status")) {
+            sender.status = obj.getInt("status")
+        }
+        if (obj.has("json_setting")) {
+            sender.jsonSetting = obj.getJSONObject("json_setting").toString()
+        }
+        senderViewModel.save(sender)
     }
 
     override fun onLongClick(view: View,  item: Sender): Boolean {
@@ -240,5 +310,7 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
             undoManager.remove(Pair(index, (viewHolder as SenderAdapter.SenderViewHolder).item))
         }
     }
+
+
 
 }

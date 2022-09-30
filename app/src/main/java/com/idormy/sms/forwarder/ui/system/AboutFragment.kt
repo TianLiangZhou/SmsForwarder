@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.idormy.sms.forwarder.BuildConfig
 import com.idormy.sms.forwarder.R
 import com.idormy.sms.forwarder.databinding.FragmentAboutBinding
 import com.idormy.sms.forwarder.ui.ToolbarFragment
@@ -28,7 +29,7 @@ class AboutFragment: ToolbarFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setTitle(R.string.about)
+        toolbar.title = getString(R.string.about_title, BuildConfig.VERSION_NAME)
     }
 
     override fun onDestroyView() {

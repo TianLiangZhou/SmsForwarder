@@ -15,7 +15,7 @@ enum class Types(val value: Int) {
     FeiShu(9),
     PushPlus(10);
     companion object {
-        fun from(value: Int) = values().first { it.value == value }
+        fun from(value: Int): Types? = values().firstOrNull { it.value == value }
     }
 }
 
@@ -38,6 +38,7 @@ object SenderHelper {
             Types.SMS -> R.mipmap.sms
             Types.FeiShu -> R.mipmap.feishu
             Types.PushPlus -> R.mipmap.pushplus
+            else -> R.mipmap.dingding
         }
     }
 }

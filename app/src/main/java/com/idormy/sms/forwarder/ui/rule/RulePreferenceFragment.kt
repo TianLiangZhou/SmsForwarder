@@ -132,6 +132,9 @@ class RulePreferenceFragment :  PreferenceFragmentCompat(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_delete -> {
+                if (ruleId > 0) {
+                    (activity as RuleConfigActivity).ruleViewModel.delete(ruleId)
+                }
                 true
             }
             R.id.action_test -> {

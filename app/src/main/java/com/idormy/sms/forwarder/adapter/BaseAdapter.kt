@@ -17,6 +17,8 @@ abstract class BaseAdapter<T: Parcelable>: RecyclerView.Adapter<BaseViewHolder<T
         fun onDelete(item: T)
         fun onClick(view: View, item: T)
         fun onLongClick(view: View, item: T): Boolean
+
+        fun onShare(item: T)
     }
 
     protected var dataSet: MutableList<T> = mutableListOf()

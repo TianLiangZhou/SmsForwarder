@@ -1,5 +1,6 @@
 package com.idormy.sms.forwarder.sender.adapter
 
+import android.util.Log
 import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.db.model.Logger
 import com.idormy.sms.forwarder.provider.Http
@@ -30,6 +31,7 @@ object PushPlus : SenderInterface<PushPlusSettingVo> {
                 sendBody.format(item.token, message.source?:"", message.content?:"", item.topic ?: "", item.template, item.channel, item.webhook ?: "", item.callbackUrl ?: "", timestamp)
             )
         }.body()
+        Log.d("Http pp = ", response)
         if (response.contains("\"code\":200")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

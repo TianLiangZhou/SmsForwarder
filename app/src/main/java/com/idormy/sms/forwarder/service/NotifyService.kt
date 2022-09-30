@@ -5,7 +5,6 @@ import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
@@ -20,14 +19,12 @@ import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
 import java.util.*
 
-@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 class NotifyService : NotificationListenerService() {
     /**
      * 发布通知
      *
      * @param sbn 状态栏通知
      */
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         //未开启转发
         if (!Core.dataStore.switchNotify) {

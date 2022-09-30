@@ -47,10 +47,12 @@ object DingDing : SenderInterface<DingDingSettingVo> {
              requestData.at?.atMobiles = item.atMobiles.split(",")
         }
         requestData.text?.content = message.content?:""
-        val response: String = Http.client.post(url) {
+        val httpResponse = Http.client.post(url) {
             contentType(ContentType.Application.Json)
             setBody(requestData)
-        }.body()
+        }
+        val response = httpResponse.body<String>()
+        Log.d("Http dd = ", response)
         if (response.contains("\"errcode\":0")) {
             logger?.forwardStatus = ResponseState.Success.value
         }

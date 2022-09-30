@@ -1,6 +1,7 @@
 package com.idormy.sms.forwarder.ui.rule
 
 import android.Manifest
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -20,9 +22,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idormy.sms.forwarder.MainActivity
 import com.idormy.sms.forwarder.R
 import com.idormy.sms.forwarder.RuleConfigActivity
+import com.idormy.sms.forwarder.ScannerActivity
 import com.idormy.sms.forwarder.adapter.BaseAdapter
 import com.idormy.sms.forwarder.adapter.RuleAdapter
 import com.idormy.sms.forwarder.data.Empty
@@ -41,8 +45,9 @@ import com.idormy.sms.forwarder.view.SenderViewModelFactory
 import com.idormy.sms.forwarder.widget.AlertDialogFragment
 import com.idormy.sms.forwarder.widget.UndoSnackbarManager
 import com.idormy.sms.forwarder.widget.observe
+import org.json.JSONObject
 
-class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener, BaseAdapter.Listener<RuleAndSender> {
+class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener, DialogInterface.OnClickListener, BaseAdapter.Listener<RuleAndSender> {
 
     private var _binding: FragmentRuleBinding? = null
 
@@ -75,6 +80,29 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
         startConfig(Rule())
     }
 
+    private val scannerResultDialog by lazy {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("扫描结果")
+            .setPositiveButton("导入", this)
+            .setNeutralButton("取消", this)
+            .setCancelable(false)
+            .create()
+    }
+
+    private var scannedResult: String? = null
+
+    private val startScannerForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK && result.data?.hasExtra("scanned_result") == true) {
+            scannedResult = result.data?.getStringExtra("scanned_result")
+            scannerResultDialog.setMessage(
+                if (scannedResult!!.startsWith("{") ||  scannedResult!!.startsWith("["))
+                    JSONObject(scannedResult!!).toString(4)
+                else scannedResult
+            )
+            scannerResultDialog.show()
+        }
+    }
+
     class NoSenderConfirmationDialogFragment : AlertDialogFragment<Empty, Empty>() {
         override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
             setTitle(R.string.no_sender_prompt)
@@ -96,7 +124,7 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.inflateMenu(R.menu.create_config)
+        toolbar.inflateMenu(R.menu.config_manager_menu)
         toolbar.setOnMenuItemClickListener(this)
         toolbar.setTitle(R.string.rule_setting)
         val listView = binding.ruleListView
@@ -139,7 +167,11 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.add -> {
+            R.id.action_scan_qr_code -> {
+                startScannerForResult.launch(Intent(context, ScannerActivity::class.java))
+                true
+            }
+            R.id.action_manual_settings -> {
                 if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                     startConfig(Rule())
                 } else {
@@ -176,7 +208,17 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
     }
 
     override fun onCopy(item: RuleAndSender) {
+        item.rule?.id = 0
+        item.rule?.name += "[副本]"
+        item.rule?.let {
+            ruleViewModel.save(it)
+        }
+    }
 
+    override fun onShare(item: RuleAndSender) {
+        if (!parentFragmentManager.isStateSaved) {
+            MainActivity.QRCodeDialog(item.toString()).show(parentFragmentManager, null)
+        }
     }
 
     override fun onDelete(item: RuleAndSender) {
@@ -220,5 +262,20 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
             undoManager.remove(Pair(index, (viewHolder as RuleAdapter.RuleViewHolder).item))
         }
     }
+
+    override fun onClick(p0: DialogInterface?, flag: Int) {
+        if (flag != DialogInterface.BUTTON_POSITIVE) {
+            return
+        }
+        if (scannedResult.isNullOrEmpty()) {
+            return
+        }
+        if (!scannedResult!!.startsWith("{")) {
+            return
+        }
+        val obj = JSONObject(scannedResult!!)
+    }
+
+
 
 }

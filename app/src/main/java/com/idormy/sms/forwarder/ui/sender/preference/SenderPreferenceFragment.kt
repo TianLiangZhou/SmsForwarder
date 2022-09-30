@@ -99,6 +99,9 @@ abstract class SenderPreferenceFragment : PreferenceFragmentCompat(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_delete -> {
+                if (senderId > 0) {
+                    (activity as SenderConfigActivity).senderViewModel.delete(senderId)
+                }
                 true
             }
             R.id.action_test -> {
@@ -118,7 +121,9 @@ abstract class SenderPreferenceFragment : PreferenceFragmentCompat(),
     private fun saveExit() {
         lifecycleScope.launch(Dispatchers.Main) {
             val sender = (activity as SenderConfigActivity).senderViewModel.get(senderId)?: Sender()
-            sender.type = position
+            if (position > 0) {
+                sender.type = position
+            }
             Core.dataStore.deserialize(sender)
             sender.encodeSetting()
             (activity as SenderConfigActivity).senderViewModel.save(sender)
@@ -130,7 +135,6 @@ abstract class SenderPreferenceFragment : PreferenceFragmentCompat(),
     private fun test(message: Message) {
         lifecycleScope.launch(Dispatchers.Main) {
             val sender = (activity as SenderConfigActivity).senderViewModel.get(senderId)?: Sender()
-            sender.type = position
             Core.dataStore.deserialize(sender)
             Forwarder.send(sender, message, null)
         }
