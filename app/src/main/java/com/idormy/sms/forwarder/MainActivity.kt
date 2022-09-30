@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.wifi.p2p.WifiP2pManager
@@ -49,6 +50,14 @@ import com.idormy.sms.forwarder.databinding.LayoutMainBinding
 import com.idormy.sms.forwarder.provider.Core
 import com.idormy.sms.forwarder.service.FrontService
 import com.idormy.sms.forwarder.ui.ProgressToolbarFragment
+import com.idormy.sms.forwarder.ui.ToolbarFragment
+import com.idormy.sms.forwarder.ui.home.HomeFragment
+import com.idormy.sms.forwarder.ui.rule.RuleFragment
+import com.idormy.sms.forwarder.ui.sender.SenderFragment
+import com.idormy.sms.forwarder.ui.system.AboutFragment
+import com.idormy.sms.forwarder.ui.system.AppFragment
+import com.idormy.sms.forwarder.ui.system.CloneFragment
+import com.idormy.sms.forwarder.ui.system.SettingFragment
 import com.idormy.sms.forwarder.utilities.Action
 import com.idormy.sms.forwarder.utilities.RedirectAppSettingPermission
 import com.idormy.sms.forwarder.view.HomeViewModel
@@ -68,14 +77,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private val iso88591 = StandardCharsets.ISO_8859_1.newEncoder()
     }
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: LayoutMainBinding
 
     internal lateinit var drawer: DrawerLayout
-
-    internal lateinit var navController: NavController
-
-    internal lateinit var navHostFragment: NavHostFragment
 
     private lateinit var navigation: NavigationView
 
@@ -160,12 +164,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         snackbar(uri).show()
     }
 
+    private fun displayFragment(fragment: ToolbarFragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_holder, fragment).commitAllowingStateLoss()
+        drawer.closeDrawers()
+    }
+
+    fun navigateToRule() {
+        navigation.menu.findItem(R.id.rule_fragment).isChecked = true
+        displayFragment(RuleFragment())
+    }
+    fun navigateToSender() {
+        navigation.menu.findItem(R.id.sender_fragment).isChecked = true
+        displayFragment(RuleFragment())
+    }
 
     private fun clean() {
         CleanLoggerAlertDialog().apply {
             key(this.javaClass.name)
-        }.show(navHostFragment.childFragmentManager, null)
-        val homeFragment = navHostFragment.childFragmentManager.fragments[0]
+        }.show(supportFragmentManager, null)
+        val homeFragment = supportFragmentManager.fragments[0]
         AlertDialogFragment.setResultListener<CleanLoggerAlertDialog, Empty>(homeFragment) { which, _ ->
             when (which) {
                 DialogInterface.BUTTON_POSITIVE -> {
@@ -187,20 +204,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab = binding.appBarMain.fabService
         stats = binding.appBarMain.stats
 
-        navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_holder) as NavHostFragment
-        navController = navHostFragment.navController
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(navController.graph, drawer)
-        navigation.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { _, dest, _ ->
-            if (dest.id == R.id.home) {
-                fab.visibility = View.VISIBLE
-                stats.visibility = View.VISIBLE
-            } else {
-                fab.visibility = View.INVISIBLE
-                stats.visibility = View.INVISIBLE
-            }
+        if (savedInstanceState == null) {
+            navigation.menu.findItem(R.id.home).isChecked = true
+            displayFragment(HomeFragment())
         }
         navigation.setNavigationItemSelectedListener(this)
         fab.setOnClickListener { clean() }
@@ -276,16 +282,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawers() else {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_holder) as ToolbarFragment
+            if (!currentFragment.onBackPressed()) {
+                if (currentFragment is HomeFragment) super.onBackPressed() else {
+                    navigation.menu.findItem(R.id.home).isChecked = true
+                    displayFragment(HomeFragment())
+                }
+            }
         }
-    }
-
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onDestroy() {
@@ -295,7 +300,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun showProgress(tips: String? = null) {
         try {
-            val first = navHostFragment.childFragmentManager.fragments.filterIsInstance<ProgressToolbarFragment>().first()
+            val first = supportFragmentManager.fragments.filterIsInstance<ProgressToolbarFragment>().first()
             first.progressBar.show()
         } catch (_: Throwable) {
             ProgressFragment().apply {
@@ -306,7 +311,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun hideProgress() {
         try {
-            val first = navHostFragment.childFragmentManager.fragments.filterIsInstance<ProgressToolbarFragment>().first()
+            val first = supportFragmentManager.fragments.filterIsInstance<ProgressToolbarFragment>().first()
             first.progressBar.hide()
         } catch (_: Throwable) {
             supportFragmentManager.fragments.filterIsInstance<ProgressFragment>().forEach { it.dismiss() }
@@ -338,16 +343,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // You need this line to handle the navigation
-        if (onNavDestinationSelected(item, navController)) {
-            if (navigation.parent is DrawerLayout) {
-                drawer.closeDrawer(navigation);
+        if (item.isChecked) drawer.closeDrawers() else {
+            when (item.itemId) {
+                R.id.home -> {
+                    displayFragment(HomeFragment())
+                    fab.visibility = View.VISIBLE
+                    stats.visibility = View.VISIBLE
+                }
+                R.id.rule_fragment-> displayFragment(RuleFragment())
+                R.id.sender_fragment -> displayFragment(SenderFragment())
+                R.id.app_list -> displayFragment(AppFragment())
+                R.id.setting -> displayFragment(SettingFragment())
+                R.id.clone-> displayFragment(CloneFragment())
+                R.id.about -> displayFragment(AboutFragment())
+                R.id.help -> launchUrl("https://www.baidu.com")
+                else -> return false
             }
-            return true
-        }
-        if (item.itemId == R.id.help) {
-            launchUrl(getString(R.string.git_home_url))
-            return false
+            if (item.itemId != R.id.home) {
+                fab.visibility = View.INVISIBLE
+                stats.visibility = View.INVISIBLE
+            }
+            item.isChecked = true
         }
         return true
     }

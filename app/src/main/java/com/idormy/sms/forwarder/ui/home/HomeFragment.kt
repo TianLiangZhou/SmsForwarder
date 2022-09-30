@@ -76,11 +76,11 @@ class HomeFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.rule -> {
-                (activity as MainActivity).navController.navigate(R.id.rule_fragment)
+                (activity as MainActivity).navigateToRule()
                 true
             }
             R.id.sender -> {
-                (activity as MainActivity).navController.navigate(R.id.sender_fragment)
+                (activity as MainActivity).navigateToSender()
                 true
             }
             else -> {

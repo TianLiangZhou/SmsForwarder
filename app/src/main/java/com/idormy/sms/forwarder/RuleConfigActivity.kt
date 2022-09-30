@@ -57,9 +57,4 @@ class RuleConfigActivity : AppCompatActivity() {
             key()
         }.show(supportFragmentManager, null) else super.onBackPressed()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
 }

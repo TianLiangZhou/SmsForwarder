@@ -23,7 +23,7 @@ class WiFiDirectBroadcastReceiver(
         intent?.run {
             val fragment: CloneFragment
             try {
-                fragment = activity.navHostFragment.childFragmentManager.fragments.filterIsInstance<CloneFragment>().first()
+                fragment = activity.supportFragmentManager.fragments.filterIsInstance<CloneFragment>().first()
             } catch (ex: Throwable) {
                 return
             }

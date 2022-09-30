@@ -2,7 +2,6 @@ package com.idormy.sms.forwarder
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -81,12 +80,12 @@ class SenderConfigActivity : AppCompatActivity() {
 
     private fun getPreferenceFragment(position: Int): Fragment {
 
-        return when(Types.from(position)) {
-            Types.DingDing-> DingDingPreferenceFragment()
-            Types.Email-> EmailPreferenceFragment()
-            Types.Bark-> BarkPreferenceFragment()
-            Types.WebNotify-> WebNotifyPreferenceFragment()
-            Types.QYWXGroup-> WXGroupPreferenceFragment()
+        return when (Types.from(position)) {
+            Types.DingDing -> DingDingPreferenceFragment()
+            Types.Email -> EmailPreferenceFragment()
+            Types.Bark -> BarkPreferenceFragment()
+            Types.WebNotify -> WebNotifyPreferenceFragment()
+            Types.QYWXGroup -> WXGroupPreferenceFragment()
             Types.QYWX -> WXAppPreferenceFragment()
             Types.ServerChan -> ServerPreferenceFragment()
             Types.Telegram -> TelegramPreferenceFragment()
@@ -96,11 +95,4 @@ class SenderConfigActivity : AppCompatActivity() {
             else -> DingDingPreferenceFragment()
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("destory", "test destory")
-    }
-
 }

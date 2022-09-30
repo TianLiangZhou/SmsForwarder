@@ -107,7 +107,7 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
         override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
             setTitle(R.string.no_sender_prompt)
             setPositiveButton(R.string.yes) { _, _ ->
-                (requireActivity() as MainActivity).navController.navigate(R.id.sender_fragment)
+                (requireActivity() as MainActivity).navigateToSender()
             }
             setNegativeButton(R.string.no, null)
         }
