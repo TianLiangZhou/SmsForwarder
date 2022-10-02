@@ -11,10 +11,7 @@ import com.idormy.sms.forwarder.sender.vo.*
 import com.idormy.sms.forwarder.utilities.Status
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import java.util.*
 
@@ -27,9 +24,11 @@ data class Sender (
     var id: Long = 0L,
     @ColumnInfo(name = "name") var name: String = "sender sample",
     @ColumnInfo(name = "status")var status: Int = Status.Off.value,
+
+    @SerialName("json_setting")
     @ColumnInfo(name = "json_setting")var jsonSetting: String = "",
     @ColumnInfo(name = "type") var type: Int = Types.Bark.value,
-    @ColumnInfo(name = "time")val time: Long = Date().time,
+    @ColumnInfo(name = "time")var time: Long = Date().time,
 ) : Parcelable {
     @IgnoredOnParcel
     @Ignore

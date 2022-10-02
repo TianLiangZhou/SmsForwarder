@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -14,11 +15,16 @@ abstract class BaseViewModel : ViewModel() {
     inline fun <T> launchAsync(
         crossinline execute: suspend () -> T,
         crossinline onSuccess: (T) -> Unit,
-        showProgress: Boolean = true
+        delayTimeMillis: Long = 0,
+        showProgress: Boolean = true,
     ) {
+        if (showProgress) {
+            progressLiveEvent.postValue(true)
+        }
         viewModelScope.launch(Dispatchers.IO) {
-            if (showProgress)
-                progressLiveEvent.postValue(true)
+            if (delayTimeMillis > 0) {
+                delay(delayTimeMillis)
+            }
             try {
                 onSuccess(execute())
             } catch (ex: Exception) {

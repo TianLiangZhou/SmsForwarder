@@ -14,7 +14,7 @@ object Http {
     val client = HttpClient(Android) {
         expectSuccess = false
         install(HttpTimeout) {
-            requestTimeoutMillis = 3000
+            requestTimeoutMillis = 5000
         }
         install(ContentNegotiation) {
             json(Json {

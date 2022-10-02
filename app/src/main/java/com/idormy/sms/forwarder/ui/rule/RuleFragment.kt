@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -32,7 +31,6 @@ import com.idormy.sms.forwarder.adapter.RuleAdapter
 import com.idormy.sms.forwarder.data.Empty
 import com.idormy.sms.forwarder.databinding.FragmentRuleBinding
 import com.idormy.sms.forwarder.db.model.Rule
-import com.idormy.sms.forwarder.db.model.RuleAndSender
 import com.idormy.sms.forwarder.db.model.Sender
 import com.idormy.sms.forwarder.provider.Core
 import com.idormy.sms.forwarder.ui.ProgressToolbarFragment
@@ -45,9 +43,11 @@ import com.idormy.sms.forwarder.view.SenderViewModelFactory
 import com.idormy.sms.forwarder.widget.AlertDialogFragment
 import com.idormy.sms.forwarder.widget.UndoSnackbarManager
 import com.idormy.sms.forwarder.widget.observe
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.json.JSONObject
 
-class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener, DialogInterface.OnClickListener, BaseAdapter.Listener<RuleAndSender> {
+class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener, DialogInterface.OnClickListener, BaseAdapter.Listener<Rule> {
 
     private var _binding: FragmentRuleBinding? = null
 
@@ -55,7 +55,7 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var senders: List<Sender> = emptyList()
+    private var senderList: List<Sender> = emptyList()
 
     private val ruleViewModel: RuleViewModel by activityViewModels {
         RuleViewModelFactory(Core.rule)
@@ -67,11 +67,9 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
 
     private val adapter: RuleAdapter by lazy { RuleAdapter() }
 
-    private val undoManager: UndoSnackbarManager<RuleAndSender> by lazy {
+    private val undoManager: UndoSnackbarManager<Rule> by lazy {
         UndoSnackbarManager(requireActivity() as MainActivity, adapter::undo, adapter::commit)
     }
-
-    private var changedData: MutableList<Sender>? = null
 
     private val main: MainActivity by lazy { requireActivity() as MainActivity }
 
@@ -133,6 +131,13 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
         listView.adapter = adapter
         listView.addItemDecoration(DividerItemDecoration(context, (listView.layoutManager as LinearLayoutManager).orientation))
         Core.rule.listener = adapter
+        with(senderViewModel) {
+            observe(senders) { list ->
+                adapter.senderList = list
+                senderList = list
+            }
+            loadAllSender()
+        }
         with(ruleViewModel) {
             observe(progressLiveEvent) { show ->
                 if (show) (activity as MainActivity).showProgress()
@@ -146,23 +151,13 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
             }
             loadRules()
         }
-        observe(senderViewModel.senders) { list->
-            senders = list
-        }
-        senderViewModel.loadAllSender()
         ItemTouchHelper(TouchCallback()).attachToRecyclerView(listView)
-        changedData = mutableListOf()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         Core.rule.listener = null
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        changedData = null
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -189,7 +184,7 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
         }
     }
     private fun startConfig(item: Rule) {
-        if (senders.isEmpty()) {
+        if (senderList.isEmpty()) {
             NoSenderConfirmationDialogFragment().apply {
                 arg(Empty())
             }.show(parentFragmentManager, null)
@@ -199,50 +194,41 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
         startActivity(
             Intent(requireContext(), RuleConfigActivity::class.java)
                 .putExtra(Action.ruleId, item.id)
-                .putParcelableArrayListExtra(Action.senders, senders as ArrayList<Sender>)
+                .putParcelableArrayListExtra(Action.senders, senderList as ArrayList<Sender>)
         )
     }
 
-    override fun onEditor(item: RuleAndSender) {
-        startConfig(item.rule!!)
+    override fun onEditor(item: Rule) {
+        startConfig(item)
     }
 
-    override fun onCopy(item: RuleAndSender) {
-        item.rule?.id = 0
-        item.rule?.name += "[副本]"
-        item.rule?.let {
-            ruleViewModel.save(it)
-        }
+    override fun onCopy(item: Rule) {
+        val duplicate = item.copy()
+        duplicate.id = 0
+        duplicate.name += "[副本]"
+        ruleViewModel.save(duplicate)
     }
 
-    override fun onShare(item: RuleAndSender) {
+    override fun onShare(item: Rule) {
         if (!parentFragmentManager.isStateSaved) {
-            MainActivity.QRCodeDialog(item.toString()).show(parentFragmentManager, null)
+            val encodeToString: String = Json.encodeToString(item)
+            MainActivity.QRCodeDialog(encodeToString).show(parentFragmentManager, null)
         }
     }
 
-    override fun onDelete(item: RuleAndSender) {
-        val id = item.rule?.id ?: 0
-        if (id > 0) {
-            ruleViewModel.delete(id)
+    override fun onDelete(item: Rule) {
+        if (item.id > 0) {
+            ruleViewModel.delete(item.id)
         }
     }
 
-    override fun onClick(view: View, item: RuleAndSender) {
+    override fun onClick(view: View, item: Rule) {
         view.isSelected = !view.isSelected
-        if (item.sender != null) {
-            val sender = item.sender
-            if (changedData!!.contains(sender)) {
-                Log.d("ref ", "equals")
-                changedData!!.remove(sender)
-            } else {
-                sender.status = if (view.isSelected) Status.On.value else Status.Off.value
-                changedData!!.add(sender)
-            }
-        }
+        item.status = if (view.isSelected) Status.On.value else Status.Off.value
+        ruleViewModel.save(item)
     }
 
-    override fun onLongClick(view: View, item: RuleAndSender): Boolean {
+    override fun onLongClick(view: View, item: Rule): Boolean {
         return false
     }
 
@@ -273,7 +259,9 @@ class RuleFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListener,
         if (!scannedResult!!.startsWith("{")) {
             return
         }
-        val obj = JSONObject(scannedResult!!)
+        val rule = Json.decodeFromString(Rule.serializer(), scannedResult!!)
+        rule.id = 0
+        ruleViewModel.save(rule)
     }
 
 

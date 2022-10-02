@@ -9,7 +9,6 @@ class SenderRepository(private val senderDao: SenderDao) {
 
     var listener: Listener? = null
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insert(sender: Sender) = senderDao.insert(sender)
 

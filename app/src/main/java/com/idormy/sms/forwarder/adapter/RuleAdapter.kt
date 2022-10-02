@@ -5,25 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import com.idormy.sms.forwarder.R
 import com.idormy.sms.forwarder.databinding.ItemRuleBinding
-import com.idormy.sms.forwarder.db.model.RuleAndSender
+import com.idormy.sms.forwarder.db.model.Rule
+import com.idormy.sms.forwarder.db.model.Sender
 import com.idormy.sms.forwarder.utilities.Status
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class RuleAdapter : BaseAdapter<RuleAndSender>() {
+class RuleAdapter : BaseAdapter<Rule>() {
 
-    override fun viewHolder(layout: Int, view: View): BaseViewHolder<RuleAndSender> {
+
+    var senderList: List<Sender> = mutableListOf()
+
+    override fun viewHolder(layout: Int, view: View): BaseViewHolder<Rule> {
         val inflate = ItemRuleBinding.inflate(LayoutInflater.from(view.context))
         return RuleViewHolder(inflate)
     }
 
     override fun getItemId(position: Int): Long {
-        return dataSet[position].rule?.id?:0
+        return dataSet[position].id
     }
 
-    inner class RuleViewHolder(private val binding: ItemRuleBinding): BaseViewHolder<RuleAndSender>(binding.root) {
-        internal lateinit var item: RuleAndSender
+    inner class RuleViewHolder(private val binding: ItemRuleBinding): BaseViewHolder<Rule>(binding.root) {
+        internal lateinit var item: Rule
         init {
             binding.editorRule.setOnClickListener {
                 listener?.apply {
@@ -56,16 +60,17 @@ class RuleAdapter : BaseAdapter<RuleAndSender>() {
         }
 
         @SuppressLint("SetTextI18n")
-        override fun bindData(data: RuleAndSender) {
+        override fun bindData(data: Rule) {
             item = data
-            binding.ruleMatch.text = data.rule?.name ?: ""
-            if (data.sender != null) {
-                binding.ruleSenderImage.setImageResource(data.sender.getImageId())
+            binding.ruleMatch.text = data.name
+            val sender = senderList.firstOrNull { it.id == data.senderId }
+            if (sender != null) {
+                binding.ruleSenderImage.setImageResource(sender.getImageId())
                 binding.ruleSenderImage.isClickable = false
                 binding.ruleSenderImage.isEnabled = false
-                itemView.isSelected = data.sender.status == Status.On.value
             }
-            val format = SimpleDateFormat("MM/dd HH:mm", Locale.CHINA).format(Date(item.rule?.time!!))
+            itemView.isSelected = data.status == Status.On.value
+            val format = SimpleDateFormat("MM/dd HH:mm", Locale.CHINA).format(Date(item.time))
             binding.date.text = "最近匹配: $format"
         }
 
@@ -73,6 +78,6 @@ class RuleAdapter : BaseAdapter<RuleAndSender>() {
 
     override fun layout(): Int = R.layout.item_rule
 
-    override fun findItemIndex(id: Long) = dataSet.indexOfFirst { it.rule?.id == id}
+    override fun findItemIndex(id: Long) = dataSet.indexOfFirst { it.id == id}
 
 }

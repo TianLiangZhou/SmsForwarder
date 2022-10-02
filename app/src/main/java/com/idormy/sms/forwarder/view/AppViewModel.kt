@@ -24,7 +24,11 @@ class AppViewModel : BaseViewModel() {
         val list = ArrayList<AppInfo>()
         val pm  = Core.app.packageManager
         try {
-            val packages = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES)
+            val packages = if (Build.VERSION.SDK_INT >= 33) {
+                pm.getInstalledPackages(PackageManager.PackageInfoFlags.of(PackageManager.GET_ACTIVITIES.toLong()))
+            } else {
+                pm.getInstalledPackages(PackageManager.GET_ACTIVITIES)
+            }
             for (pkg in packages) {
                 if (pm.getLaunchIntentForPackage(pkg.packageName) == null) {
                     continue

@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.wifi.p2p.WifiP2pManager
@@ -31,12 +30,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -72,7 +65,7 @@ import java.nio.charset.StandardCharsets
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
-        private const val KEY_URL = "com.github.shadowsocks.QRCodeDialog.KEY_URL"
+        private const val KEY_URL = "com.idormy.sms.forwarder.QRCodeDialog.KEY_URL"
 
         private val iso88591 = StandardCharsets.ISO_8859_1.newEncoder()
     }
@@ -98,8 +91,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(Core.logger, Core.rule, Core.sender) }
 
+    private val requiredPermissions = listOf(
+        arrayOf(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS),
+        arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG),
+        arrayOf(Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE)
+    )
+
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { map ->
-        if (map[Manifest.permission.RECEIVE_SMS] == true || map[Manifest.permission.READ_PHONE_STATE] == true || map[Manifest.permission.READ_CALL_LOG] == true || map[Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE] == true) {
+
+        val sms = map.filterKeys {key ->
+            requiredPermissions[0].contains(key)
+        }
+        val phone = map.filterKeys { key ->
+            requiredPermissions[1].contains(key)
+        }
+        val notify = map.filterKeys { key ->
+            requiredPermissions[2].contains(key)
+        }
+        if (sms.all { it.value } || phone.all { it.value } || notify.all { it.value }) {
             if (!FrontService.isRunning) {
                 Core.startService()
             }
@@ -175,7 +184,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     fun navigateToSender() {
         navigation.menu.findItem(R.id.sender_fragment).isChecked = true
-        displayFragment(RuleFragment())
+        displayFragment(SenderFragment())
     }
 
     private fun clean() {
@@ -229,28 +238,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun permissionHandler() {
-        val requiredPermissions = listOf(
-            Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_CALL_LOG,
-            Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE
-        )
-        val requiredMessages = listOf(
-            "短信通知",
-            "通话状态",
-            "通话记录",
-            "通知监听",
-        )
+        val requiredMessages = listOf("短信", "电话", "通知")
         var isStartService = false
         val requestPermissions = mutableListOf<String>()
         val showMessages = mutableListOf<String>()
-        requiredPermissions.forEachIndexed { i, permission ->
-            if (hasPermissions(permission)) {
+        requiredPermissions.forEachIndexed { i, permissions ->
+            if (hasPermissions(*permissions)) {
                 isStartService = true
-            } else if (shouldShowRequestPermissionRationale(permission)) {
-                showMessages.add(requiredMessages[i])
             } else {
-                requestPermissions.add(permission)
+                permissions.forEach {permission ->
+                    if (shouldShowRequestPermissionRationale(permission)) {
+                        !showMessages.contains(requiredMessages[1]) && showMessages.add(requiredMessages[i])
+                    } else {
+                        requestPermissions.add(permission)
+                    }
+                }
             }
         }
         val otherPermissions = listOf(
@@ -267,7 +269,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             snackbar("应用需要: " + showMessages.joinToString() + "相关权限才能完成对应的功能转发.").setAction("前往设置") {
                 permSetting.launch(null)
             }.show()
-        } else if (requestPermissions.isNotEmpty()) {
+        }
+        if (requestPermissions.isNotEmpty()) {
             requestPermissionLauncher.launch(requestPermissions.toTypedArray())
         }
         if (isStartService && !FrontService.isRunning) {
@@ -312,7 +315,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun hideProgress() {
         try {
             val first = supportFragmentManager.fragments.filterIsInstance<ProgressToolbarFragment>().first()
-            first.progressBar.hide()
+            first.progressBar.visibility = View.GONE
         } catch (_: Throwable) {
             supportFragmentManager.fragments.filterIsInstance<ProgressFragment>().forEach { it.dismiss() }
         }
@@ -356,7 +359,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.setting -> displayFragment(SettingFragment())
                 R.id.clone-> displayFragment(CloneFragment())
                 R.id.about -> displayFragment(AboutFragment())
-                R.id.help -> launchUrl("https://www.baidu.com")
+                R.id.help -> launchUrl("https://github.com/TianLiangZhou/SmsForwarder-Kotlin")
                 else -> return false
             }
             if (item.itemId != R.id.home) {

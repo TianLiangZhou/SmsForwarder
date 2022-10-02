@@ -9,11 +9,13 @@ import com.idormy.sms.forwarder.data.Message
 import com.idormy.sms.forwarder.db.model.Logger
 import com.idormy.sms.forwarder.provider.Core
 import com.idormy.sms.forwarder.sender.Forwarder
+import com.idormy.sms.forwarder.utilities.Status
 import com.idormy.sms.forwarder.utilities.Worker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import java.util.*
 
 class SendWorker(
     context: Context,
@@ -23,28 +25,39 @@ class SendWorker(
         return withContext(Dispatchers.IO) {
             val messageListString = inputData.getString(Worker.sendMessage)
             val mutableList = Json.decodeFromString<List<Message>>(messageListString!!)
-            val senders = Core.sender.getSenderRule()
-            Log.d("sender and rule ", senders.size.toString())
-            if (senders.isEmpty()) {
+            val rules = Core.rule.getRuleAndSender()
+            Log.d("rule size ", rules.size.toString())
+            if (rules.isEmpty()) {
                 return@withContext Result.failure(workDataOf("send" to "failed"))
             }
             val loggers = mutableListOf<Logger>()
             val time = System.currentTimeMillis()
             for (message in mutableList) {
-                for (block in senders) {
-                    if (block.rules == null || block.rules.isEmpty())  {
+                for (ruleSender in rules) {
+                    if (ruleSender.rule == null || ruleSender.sender == null) {
                         continue
                     }
-                    block.rules.forEach { rule ->
-                        if (!rule.match(message)) {
-                            return@forEach
-                        }
-                        val logger = Logger(
-                            0, message.type.value, message.source?:"", message.content?:"", message.simSlot, rule.id, time
-                        )
-                        Forwarder.send(block.sender, message, logger)
-                        loggers.add(logger)
+                    if (ruleSender.rule.status != Status.On.value)  {
+                        continue
                     }
+                    if (!ruleSender.rule.match(message)) {
+                        continue
+                    }
+                    val logger = Logger(
+                        0,
+                        message.type.value,
+                        message.source?:"",
+                        message.content?:"",
+                        message.simSlot,
+                        ruleSender.rule.id,
+                        time
+                    )
+                    Forwarder.send(ruleSender.sender, message, logger)
+                    loggers.add(logger)
+                    ruleSender.rule.time = Date().time
+                    ruleSender.sender.time = Date().time
+                    Core.rule.update(ruleSender.rule)
+                    Core.sender.update(ruleSender.sender)
                 }
             }
             if (loggers.isNotEmpty()) {

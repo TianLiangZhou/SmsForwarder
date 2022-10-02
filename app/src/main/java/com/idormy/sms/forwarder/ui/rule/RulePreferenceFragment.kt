@@ -1,6 +1,7 @@
 package com.idormy.sms.forwarder.ui.rule
 
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -87,7 +88,11 @@ class RulePreferenceFragment :  PreferenceFragmentCompat(),
         category?.onPreferenceChangeListener = this
         field = findPreference("field")!!
         sender = findPreference("sender")!!
-        val senders = requireActivity().intent.getParcelableArrayListExtra<Sender>(Action.senders)?: emptyList()
+        val senders = if (Build.VERSION.SDK_INT >= 33) {
+            requireActivity().intent.getParcelableArrayListExtra(Action.senders, Sender::class.java)?: emptyList()
+        } else {
+            requireActivity().intent.getParcelableArrayListExtra(Action.senders)?: emptyList()
+        }
         sender.initSenders(senders)
         ruleId = requireActivity().intent.getLongExtra(Action.ruleId, 0L)
     }

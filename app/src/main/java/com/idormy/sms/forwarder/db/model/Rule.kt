@@ -12,12 +12,15 @@ import com.idormy.sms.forwarder.utilities.RuleKey
 import com.idormy.sms.forwarder.utilities.Status
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.*
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
 @Parcelize
 @Entity(tableName = "rule")
+@Serializable
 data class Rule(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
@@ -27,12 +30,16 @@ data class Rule(
     @ColumnInfo(name = "filed")var filed: String = "msg_content",
     @ColumnInfo(name = "tcheck")var mode: String = "contain",
     @ColumnInfo(name = "value")var value: String = "match SMS content",
+    @SerialName("sender_id")
     @ColumnInfo(name = "sender_id")var senderId: Long = 0L,
+    @SerialName("sim_slot")
     @ColumnInfo(name = "sim_slot")var simSlot: String = "ALL",
+    @SerialName("sms_template")
     @ColumnInfo(name = "sms_template")var smsTemplate: String = "",
+    @SerialName("regex_replace")
     @ColumnInfo(name = "regex_replace")var regexReplace: String = "",
     @ColumnInfo(name = "time")var time: Long = Date().time,
-    @ColumnInfo(name = "status")var status: Int = Status.Off.value,
+    @ColumnInfo(name = "status")var status: Int = Status.On.value,
 ) : Parcelable {
 
     @IgnoredOnParcel
@@ -60,7 +67,7 @@ data class Rule(
 
 
     private fun matchValue(source: String): Boolean {
-        if (value.isEmpty()) {
+        if (value.isNotEmpty() && value == "*") {
             return true
         }
         return when(Mode.from(mode)) {

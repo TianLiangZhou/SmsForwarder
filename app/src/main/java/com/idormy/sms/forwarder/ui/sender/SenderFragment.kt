@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -23,9 +22,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idormy.sms.forwarder.MainActivity
 import com.idormy.sms.forwarder.R
@@ -42,12 +38,10 @@ import com.idormy.sms.forwarder.sender.Types
 import com.idormy.sms.forwarder.ui.ProgressToolbarFragment
 import com.idormy.sms.forwarder.utilities.Action
 import com.idormy.sms.forwarder.utilities.Status
-import com.idormy.sms.forwarder.utilities.Worker
 import com.idormy.sms.forwarder.view.SenderViewModel
 import com.idormy.sms.forwarder.view.SenderViewModelFactory
 import com.idormy.sms.forwarder.widget.UndoSnackbarManager
 import com.idormy.sms.forwarder.widget.observe
-import com.idormy.sms.forwarder.workers.UpdateSenderWorker
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
@@ -87,8 +81,6 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
 
     private val senderViewModel: SenderViewModel by activityViewModels { SenderViewModelFactory(Core.sender) }
 
-    private var changedData: MutableList<Sender>? = null
-
     private val permReqLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         startConfig(Sender(type = Types.SMS.value))
     }
@@ -119,7 +111,6 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
         toolbar.inflateMenu(R.menu.config_manager_menu)
         toolbar.setOnMenuItemClickListener(this)
         toolbar.setTitle(R.string.sender_setting)
-        changedData = mutableListOf()
         val listView = binding.senderListView
         adapter.listener = this
         listView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -188,16 +179,9 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        if (changedData!!.isNotEmpty()) {
-            val request = OneTimeWorkRequestBuilder<UpdateSenderWorker>()
-                .setInputData(workDataOf(Worker.updateSender to Json.encodeToString(changedData)))
-                .build()
-            WorkManager.getInstance(requireContext()).enqueue(request)
-        }
     }
 
     override fun onDestroy() {
-        changedData = null
         Core.sender.listener = null
         super.onDestroy()
     }
@@ -231,14 +215,22 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
     }
 
     override fun onCopy(item: Sender) {
-        item.id = 0
-        item.name += "[副本]"
-        senderViewModel.save(item)
+        val duplicate = item.copy()
+        duplicate.id = 0
+        duplicate.name += "[副本]"
+        senderViewModel.save(duplicate)
     }
 
     override fun onShare(item: Sender) {
         if (!parentFragmentManager.isStateSaved) {
-            MainActivity.QRCodeDialog(item.toString()).show(parentFragmentManager, null)
+            val encodeToString: String = Json.encodeToString(item)
+            MainActivity.QRCodeDialog(
+                encodeToString.replace("\\", "")
+                    .replace("\"{", "{")
+                    .replace("}\"", "}")
+                    .replace("\"[", "[")
+                    .replace("]\"", "]")
+            ).show(parentFragmentManager, null)
         }
     }
 
@@ -248,13 +240,8 @@ class SenderFragment : ProgressToolbarFragment(), Toolbar.OnMenuItemClickListene
 
     override fun onClick(view: View,  item: Sender) {
         view.isSelected = !view.isSelected
-        if (changedData!!.contains(item)) {
-            Log.d("ref ", "equals")
-            changedData!!.remove(item)
-        } else {
-            item.status = if (view.isSelected) Status.On.value else Status.Off.value
-            changedData!!.add(item)
-        }
+        item.status = if (view.isSelected) Status.On.value else Status.Off.value
+        senderViewModel.save(item)
     }
 
     override fun onClick(dialog: DialogInterface?, flag: Int) {
